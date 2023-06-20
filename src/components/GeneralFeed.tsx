@@ -11,9 +11,9 @@ const GeneralFeed = async () => {
       votes: true,
       author: true,
       comments: true,
-      subreddit: true,
+      community: true,
     },
-    take: INFINITE_SCROLLING_PAGINATION_RESULTS, 
+    take: INFINITE_SCROLLING_PAGINATION_RESULTS,
   });
 
   return <PostFeed initialPosts={posts} />;

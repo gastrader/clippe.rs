@@ -1,6 +1,6 @@
 "use client";
 
-import { Prisma, Subreddit } from "@prisma/client";
+import { Prisma, Community } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import debounce from "lodash.debounce";
@@ -41,7 +41,6 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
   }, []);
 
   const {
-    
     data: queryResults,
     refetch,
     isFetched,
@@ -49,8 +48,8 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
     queryFn: async () => {
       if (!input) return [];
       const { data } = await axios.get(`/api/search?q=${input}`);
-      return data as (Subreddit & {
-        _count: Prisma.SubredditCountOutputType;
+      return data as (Community & {
+        _count: Prisma.CommunityCountOutputType;
       })[];
     },
     queryKey: ["search-query"],
@@ -67,7 +66,6 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
       className="relative rounded-lg border max-w-lg z-50 overflow-visible"
     >
       <CommandInput
-        
         onValueChange={(text) => {
           setInput(text);
           debounceRequest();

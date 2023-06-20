@@ -15,11 +15,11 @@ export async function GET(req: Request) {
         userId: session.user.id,
       },
       include: {
-        subreddit: true,
+        community: true,
       },
     });
 
-    followedCommunitiesIds = followedCommunities.map((sub) => sub.subreddit.id);
+    followedCommunitiesIds = followedCommunities.map((sub) => sub.community.id);
   }
 
   try {
@@ -60,7 +60,7 @@ export async function GET(req: Request) {
         createdAt: "desc",
       },
       include: {
-        subreddit: true,
+        community: true,
         votes: true,
         author: true,
         comments: true,
