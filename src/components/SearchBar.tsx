@@ -83,14 +83,14 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
               {queryResults?.map((community) => (
                 <CommandItem
                   onSelect={(e) => {
-                    router.push(`/r/${e}`);
+                    router.push(`/c/${e}`);
                     router.refresh();
                   }}
                   key={community.id}
                   value={community.name}
                 >
                   <Users className="mr-2 h-4 w-4" />
-                  <a href={`/c/${community.name}`}>r/{community.name}</a>
+                  <a href={`/c/${community.name}`}>c/{community.name}</a>
                 </CommandItem>
               ))}
             </CommandGroup>
