@@ -47,7 +47,7 @@ export function UserNameForm({ user, className, ...props }: UserNameFormProps) {
     mutationFn: async ({ name }: FormData) => {
       const payload: FormData = { name };
 
-      const { data } = await axios.patch(`/api/username/`, payload);
+      const { data } = await axios.patch(`/api/username`, payload);
       return data;
     },
     onError: (err) => {
