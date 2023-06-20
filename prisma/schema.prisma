@@ -44,8 +44,8 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
 
-  createdFeeds    Feed[]          @relation("CreatedBy")
-  moderatingFeeds FeedModerator[]
+  createdCommunities    Community[]          @relation("CreatedBy")
+  moderatingCommunities CommunityModerator[]
 
   sessions      Session[]
   posts         Post[]
@@ -56,17 +56,17 @@ model User {
   account       Account[]
 }
 
-model FeedModerator {
-  feed   Feed   @relation(fields: [feedId], references: [id])
-  feedId String
+model CommunityModerator {
+  community   Community @relation(fields: [communityId], references: [id])
+  communityId String
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  @@id([feedId, userId])
+  @@id([communityId, userId])
 }
 
-model Feed {
+model Community {
   id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
@@ -77,7 +77,7 @@ model Feed {
   creator   User?   @relation("CreatedBy", fields: [creatorId], references: [id])
 
   subscribers Subscription[]
-  moderators  FeedModerator[]
+  moderators  CommunityModerator[]
 
   @@index([name])
 }
@@ -86,10 +86,10 @@ model Subscription {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  feed   Feed   @relation(fields: [feedId], references: [id])
-  feedId String
+  community   Community @relation(fields: [communityId], references: [id])
+  communityId String
 
-  @@id([userId, feedId])
+  @@id([userId, communityId])
 }
 
 model Post {
@@ -99,8 +99,8 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  feed   Feed   @relation(fields: [feedId], references: [id])
-  feedId String
+  community   Community @relation(fields: [communityId], references: [id])
+  communityId String
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String
