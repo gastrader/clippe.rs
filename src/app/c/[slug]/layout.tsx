@@ -1,4 +1,4 @@
-//wrapper around page contents for every single subreddit
+//wrapper around page contents for every single community
 
 import SubscribeLeaveToggle from "@/components/SubscribeLeaveToggle";
 import ToFeedButton from "@/components/ToFeedButton";

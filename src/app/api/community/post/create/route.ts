@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { communityId, title, content } = PostValidator.parse(body);
 
-    // check if user has already subscribed to subreddit
+    // check if user has already subscribed to community
     const subscriptionExists = await db.subscription.findFirst({
       where: {
         communityId,
@@ -25,14 +25,14 @@ export async function POST(req: Request) {
 
     if (!subscriptionExists) {
       return new Response(
-        "You must be subscribed to this subreddit in order to post!",
+        "You must be subscribed to this community in order to post!",
         {
           status: 469,
         }
       );
     }
 
-    // create subreddit and associate it with the user
+    // create community and associate it with the user
     await db.post.create({
       data: {
         title,

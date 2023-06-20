@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { communityId } = CommunitySubscriptionValidator.parse(body);
 
-    // check if user has already subscribed to subreddit
+    // check if user has already subscribed to community
     const subscriptionExists = await db.subscription.findFirst({
       where: {
         communityId,
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // create subreddit and associate it with the user
+    // create community and associate it with the user
     await db.subscription.create({
       data: {
         communityId,
