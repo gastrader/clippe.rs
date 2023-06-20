@@ -13,20 +13,23 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { subredditId, title, content, } = PostValidator.parse(body);
+    const { subredditId, title, content } = PostValidator.parse(body);
 
     // check if user has already subscribed to subreddit
     const subscriptionExists = await db.subscription.findFirst({
       where: {
-        subredditId,
+        communityId: subredditId,
         userId: session.user.id,
       },
     });
 
     if (!subscriptionExists) {
-      return new Response("You must be subscribed to this subreddit in order to post!", {
-        status: 469,
-      });
+      return new Response(
+        "You must be subscribed to this subreddit in order to post!",
+        {
+          status: 469,
+        }
+      );
     }
 
     // create subreddit and associate it with the user
@@ -35,7 +38,7 @@ export async function POST(req: Request) {
         title,
         content,
         authorId: session.user.id,
-        subredditId,
+        communityId: subredditId,
       },
     });
 

@@ -18,7 +18,6 @@ export async function PATCH(req: Request) {
     // if no existing vote, create a new vote
     await db.comment.create({
       data: {
-        userId: session.user.id,
         text,
         postId,
         authorId: session.user.id,
@@ -32,9 +31,8 @@ export async function PATCH(req: Request) {
       return new Response(error.message, { status: 422 });
     }
 
-    return new Response(
-      "Could not create comment. Please try later",
-      { status: 500 }
-    );
+    return new Response("Could not create comment. Please try later", {
+      status: 500,
+    });
   }
 }

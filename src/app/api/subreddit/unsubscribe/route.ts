@@ -17,34 +17,35 @@ export async function POST(req: Request) {
     // check if user has already subscribed or not
     const subscriptionExists = await db.subscription.findFirst({
       where: {
-        subredditId,
+        communityId: subredditId,
         userId: session.user.id,
       },
     });
 
     if (!subscriptionExists) {
       return new Response(
-        "You've not been subscribed to this subreddit, yet.",
+        "You've not been subscribed to this community, yet.",
         {
           status: 400,
         }
       );
     }
-    const subreddit = await db.subreddit.findFirst({
+    const community = await db.community.findFirst({
       where: {
         id: subredditId,
         creatorId: session.user.id,
-      }
-    })
-    if(subreddit){
-      return new Response("You can unsub from your own subreddit", {status:400})
+      },
+    });
+    if (community) {
+      return new Response("You can't unsub from your own community", {
+        status: 400,
+      });
     }
-
 
     await db.subscription.delete({
       where: {
-        userId_subredditId: {
-          subredditId,
+        userId_communityId: {
+          communityId: subredditId,
           userId: session.user.id,
         },
       },
@@ -58,7 +59,7 @@ export async function POST(req: Request) {
     }
 
     return new Response(
-      "Could not unsubscribe from subreddit at this time. Please try later",
+      "Could not unsubscribe from community at this time. Please try later",
       { status: 500 }
     );
   }

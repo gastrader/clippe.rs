@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     // check if user has already subscribed to subreddit
     const subscriptionExists = await db.subscription.findFirst({
       where: {
-        subredditId,
+        communityId: subredditId,
         userId: session.user.id,
       },
     });
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     // create subreddit and associate it with the user
     await db.subscription.create({
       data: {
-        subredditId,
+        communityId: subredditId,
         userId: session.user.id,
       },
     });
