@@ -43,6 +43,8 @@ model User {
   username      String?   @unique
   email         String?   @unique
   emailVerified DateTime?
+  image         String?
+  name          String?
 
   createdCommunities    Community[]          @relation("CreatedBy")
   moderatingCommunities CommunityModerator[]
