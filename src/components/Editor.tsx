@@ -48,7 +48,7 @@ export const Editor: React.FC<EditorProps> = ({ communityId }) => {
       communityId,
     }: PostCreationRequest) => {
       const payload: PostCreationRequest = { title, content, communityId };
-      const { data } = await axios.post("/api/subreddit/post/create", payload);
+      const { data } = await axios.post("/api/community/post/create", payload);
       return data;
     },
     onError: (error) => {

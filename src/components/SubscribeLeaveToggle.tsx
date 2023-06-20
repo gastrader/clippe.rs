@@ -29,7 +29,7 @@ const SubscribeLeaveToggle = ({
         communityId,
       };
 
-      const { data } = await axios.post("/api/subreddit/subscribe", payload);
+      const { data } = await axios.post("/api/community/subscribe", payload);
       return data as string;
     },
     onError: (err) => {
@@ -64,7 +64,7 @@ const SubscribeLeaveToggle = ({
         communityId,
       };
 
-      const { data } = await axios.post("/api/subreddit/unsubscribe", payload);
+      const { data } = await axios.post("/api/community/unsubscribe", payload);
       return data as string;
     },
     onError: (err: AxiosError) => {

@@ -21,7 +21,7 @@ const Page = () => {
         name: input,
       };
 
-      const { data } = await axios.post("/api/subreddit", payload);
+      const { data } = await axios.post("/api/community", payload);
       return data as string;
     },
     onError: (err) => {

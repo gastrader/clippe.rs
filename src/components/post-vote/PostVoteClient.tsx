@@ -38,36 +38,37 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         voteType: type,
       };
       //PATCH REQUEST
-      await axios.patch("/api/subreddit/post/vote", payload);
+      await axios.patch("/api/community/post/vote", payload);
     },
-    onError: (err, voteType) =>{  
-      if(voteType === 'UP') setVotesAmt((prev) => prev-1)
+    onError: (err, voteType) => {
+      if (voteType === "UP") setVotesAmt((prev) => prev - 1);
       else setVotesAmt((prev) => prev + 1);
 
       //reset current vote
-      setcurrentVote(prevVote)
-      if(err instanceof AxiosError){
-        if(err.response?.status === 401){
-          return loginToast
+      setcurrentVote(prevVote);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          return loginToast;
         }
       }
       return toast({
-        title: 'Something went wrong',
-        description: 'Your vote was not registered, please try again.',
-        variant: 'destructive'
-      })
+        title: "Something went wrong",
+        description: "Your vote was not registered, please try again.",
+        variant: "destructive",
+      });
     },
     onMutate: (type: VoteType) => {
-      if(currentVote === type){
-        setcurrentVote(undefined)
-        if(type==='UP') setVotesAmt((prev) => prev-1)
+      if (currentVote === type) {
+        setcurrentVote(undefined);
+        if (type === "UP") setVotesAmt((prev) => prev - 1);
         else if (type === "DOWN") setVotesAmt((prev) => prev + 1);
       } else {
-        setcurrentVote(type)
+        setcurrentVote(type);
         if (type === "UP") setVotesAmt((prev) => prev + (currentVote ? 2 : 1));
-        else if (type === "DOWN") setVotesAmt((prev) => prev - (currentVote ? 2 : 1));
+        else if (type === "DOWN")
+          setVotesAmt((prev) => prev - (currentVote ? 2 : 1));
       }
-    }
+    },
   });
 
   return (
