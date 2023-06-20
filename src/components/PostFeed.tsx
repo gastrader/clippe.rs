@@ -12,10 +12,10 @@ import { useSession } from "next-auth/react";
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
-  subredditName?: string;
+  communityName?: string;
 }
 
-const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
+const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName }) => {
   const lastPostRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
@@ -28,7 +28,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
     async ({ pageParam = 1 }) => {
       const query =
         `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}` +
-        (!!subredditName ? `&subredditName=${subredditName}` : "");
+        (!!communityName ? `&communityName=${communityName}` : "");
 
       const { data } = await axios.get(query);
       return data as ExtendedPost[];
@@ -53,14 +53,18 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
       {posts.map((post, index) => {
-        const votesAmt = post.votes.reduce((acc: number, vote: { type: string; }) => {
-          if (vote.type === "UP") return acc + 1;
-          if (vote.type === "DOWN") return acc - 1;
-          return acc;
-        }, 0);
+        const votesAmt = post.votes.reduce(
+          (acc: number, vote: { type: string }) => {
+            if (vote.type === "UP") return acc + 1;
+            if (vote.type === "DOWN") return acc - 1;
+            return acc;
+          },
+          0
+        );
 
         const currentVote = post.votes.find(
-          (vote: { userId: string | undefined; }) => vote.userId === session?.user.id
+          (vote: { userId: string | undefined }) =>
+            vote.userId === session?.user.id
         );
 
         if (index === posts.length - 1) {
@@ -71,7 +75,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
                 key={post.id}
                 post={post}
                 commentAmt={post.comments.length}
-                subredditName={post.subreddit.name}
+                communityName={post.subreddit.name}
                 votesAmt={votesAmt}
                 currentVote={currentVote}
               />
@@ -83,7 +87,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
               key={post.id}
               post={post}
               commentAmt={post.comments.length}
-              subredditName={post.subreddit.name}
+              communityName={post.subreddit.name}
               votesAmt={votesAmt}
               currentVote={currentVote}
             />

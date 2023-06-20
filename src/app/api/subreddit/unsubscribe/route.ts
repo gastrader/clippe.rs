@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { SubredditSubscriptionValidator } from "@/lib/validators/subreddit";
+import { CommunitySubscriptionValidator } from "@/lib/validators/community";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -12,12 +12,12 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { subredditId } = SubredditSubscriptionValidator.parse(body);
+    const { communityId } = CommunitySubscriptionValidator.parse(body);
 
     // check if user has already subscribed or not
     const subscriptionExists = await db.subscription.findFirst({
       where: {
-        communityId: subredditId,
+        communityId,
         userId: session.user.id,
       },
     });
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     }
     const community = await db.community.findFirst({
       where: {
-        id: subredditId,
+        id: communityId,
         creatorId: session.user.id,
       },
     });
@@ -45,13 +45,13 @@ export async function POST(req: Request) {
     await db.subscription.delete({
       where: {
         userId_communityId: {
-          communityId: subredditId,
+          communityId,
           userId: session.user.id,
         },
       },
     });
 
-    return new Response(subredditId);
+    return new Response(communityId);
   } catch (error) {
     error;
     if (error instanceof z.ZodError) {

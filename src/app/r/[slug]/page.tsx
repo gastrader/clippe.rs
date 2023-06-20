@@ -16,7 +16,7 @@ const page = async ({ params }: PageProps) => {
   const { slug } = params;
 
   const session = await getAuthSession();
-  const subreddit = await db.community.findFirst({
+  const community = await db.community.findFirst({
     where: { name: slug },
     include: {
       posts: {
@@ -33,15 +33,15 @@ const page = async ({ params }: PageProps) => {
       },
     },
   });
-  if (!subreddit) return notFound();
+  if (!community) return notFound();
   return (
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">
         {" "}
-        r/{subreddit.name}
+        c/{community.name}
       </h1>
       <MiniCreatePost session={session} />
-      <PostFeed initialPosts={subreddit.posts} subredditName={subreddit.name} />
+      <PostFeed initialPosts={community.posts} subredditName={community.name} />
     </>
   );
 };

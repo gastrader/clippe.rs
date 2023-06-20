@@ -1,25 +1,25 @@
-import { formatTimeToNow } from '@/lib/utils';
-import { Post, User, Vote } from '@prisma/client';
-import { MessageSquare } from 'lucide-react';
-import React, { FC, useRef } from 'react'
-import EditorOutput from './EditorOutput';
-import PostVoteClient from './post-vote/PostVoteClient';
+import { formatTimeToNow } from "@/lib/utils";
+import { Post, User, Vote } from "@prisma/client";
+import { MessageSquare } from "lucide-react";
+import React, { FC, useRef } from "react";
+import EditorOutput from "./EditorOutput";
+import PostVoteClient from "./post-vote/PostVoteClient";
 
-type PartialVote = Pick<Vote, 'type'>
+type PartialVote = Pick<Vote, "type">;
 
 interface PostProps {
-    subredditName: string
-    post: Post & {
-        author: User,
-        votes: Vote[]
-    },
-    commentAmt:number,
-    votesAmt: number,
-    currentVote?: PartialVote
+  communityName: string;
+  post: Post & {
+    author: User;
+    votes: Vote[];
+  };
+  commentAmt: number;
+  votesAmt: number;
+  currentVote?: PartialVote;
 }
 
 const Post: FC<PostProps> = ({
-  subredditName,
+  communityName,
   post,
   commentAmt,
   votesAmt: votesAmt,
@@ -29,16 +29,20 @@ const Post: FC<PostProps> = ({
   return (
     <div className="rounded-md bg-white shadow">
       <div className="px-6 py-4 flex justify-between">
-        <PostVoteClient initialVotesAmt={votesAmt} postId={post.id} initialVote={currentVote?.type}/>
+        <PostVoteClient
+          initialVotesAmt={votesAmt}
+          postId={post.id}
+          initialVote={currentVote?.type}
+        />
         <div className="w-0 flex-1">
           <div className="max-h-40 mt-1 text-xs text-gray-500">
-            {subredditName ? (
+            {communityName ? (
               <>
                 <a
                   className="underline text-zinc-900 text-sm underline-offset-2"
-                  href={`/r/${subredditName}`}
+                  href={`/c/${communityName}`}
                 >
-                  r/{subredditName}
+                  c/{communityName}
                 </a>
                 <span className="px-1">•</span>
               </>
@@ -46,7 +50,7 @@ const Post: FC<PostProps> = ({
             <span>Posted by u/{post.author.username}</span>{" "}
             {formatTimeToNow(new Date(post.createdAt))}
           </div>
-          <a href={`/r/${subredditName}/post/${post.id}`}>
+          <a href={`/c/${communityName}/post/${post.id}`}>
             <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900">
               {post.title}
             </h1>
@@ -66,7 +70,7 @@ const Post: FC<PostProps> = ({
       <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6">
         <a
           className="w-fit flex items-center gap-2"
-          href={`/r/${subredditName}/post/${post.id}`}
+          href={`/c/${communityName}/post/${post.id}`}
         >
           <MessageSquare className="h-4 w-4" /> {commentAmt} comments
         </a>
@@ -75,4 +79,4 @@ const Post: FC<PostProps> = ({
   );
 };
 
-export default Post
+export default Post;

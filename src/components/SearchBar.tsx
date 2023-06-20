@@ -80,17 +80,17 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
           {isFetched && <CommandEmpty>No results found.</CommandEmpty>}
           {(queryResults?.length ?? 0) > 0 ? (
             <CommandGroup heading="Communities">
-              {queryResults?.map((subreddit) => (
+              {queryResults?.map((community) => (
                 <CommandItem
                   onSelect={(e) => {
                     router.push(`/r/${e}`);
                     router.refresh();
                   }}
-                  key={subreddit.id}
-                  value={subreddit.name}
+                  key={community.id}
+                  value={community.name}
                 >
                   <Users className="mr-2 h-4 w-4" />
-                  <a href={`/r/${subreddit.name}`}>r/{subreddit.name}</a>
+                  <a href={`/c/${community.name}`}>r/{community.name}</a>
                 </CommandItem>
               ))}
             </CommandGroup>

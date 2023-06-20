@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { SubredditValidator } from "@/lib/validators/subreddit";
+import { CommunityValidator } from "@/lib/validators/community";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -12,9 +12,9 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name } = SubredditValidator.parse(body);
+    const { name } = CommunityValidator.parse(body);
 
-    // check if subreddit already exists
+    // check if community already exists
     const communityExists = await db.community.findFirst({
       where: {
         name,
@@ -22,10 +22,10 @@ export async function POST(req: Request) {
     });
 
     if (communityExists) {
-      return new Response("Subreddit already exists", { status: 409 });
+      return new Response("Community already exists", { status: 409 });
     }
 
-    // create subreddit and associate it with the user
+    // create community and associate it with the user
     const community = await db.community.create({
       data: {
         name,

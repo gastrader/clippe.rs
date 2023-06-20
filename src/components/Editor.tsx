@@ -19,10 +19,10 @@ import "@/styles/editor.css";
 type FormData = z.infer<typeof PostValidator>;
 
 interface EditorProps {
-  subredditId: string;
+  communityId: string;
 }
 
-export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
+export const Editor: React.FC<EditorProps> = ({ communityId }) => {
   const {
     register,
     handleSubmit,
@@ -30,7 +30,7 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
   } = useForm<FormData>({
     resolver: zodResolver(PostValidator),
     defaultValues: {
-      subredditId,
+      communityId,
       title: "",
       content: null,
     },
@@ -45,28 +45,28 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
     mutationFn: async ({
       title,
       content,
-      subredditId,
+      communityId,
     }: PostCreationRequest) => {
-      const payload: PostCreationRequest = { title, content, subredditId };
+      const payload: PostCreationRequest = { title, content, communityId };
       const { data } = await axios.post("/api/subreddit/post/create", payload);
       return data;
     },
-  onError: (error) => {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 469) {
-      return toast({
-        title: "Error",
-        description: "You must be subscribed to the community to make a post",
-        variant: "destructive",
-      });
-    } else {
-      return toast({
-        title: "Something went wrong.",
-        description: "Your post was not published. Please try again.",
-        variant: "destructive",
-      });
-    }
-  },
+    onError: (error) => {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 469) {
+        return toast({
+          title: "Error",
+          description: "You must be subscribed to the community to make a post",
+          variant: "destructive",
+        });
+      } else {
+        return toast({
+          title: "Something went wrong.",
+          description: "Your post was not published. Please try again.",
+          variant: "destructive",
+        });
+      }
+    },
     onSuccess: () => {
       // turn pathname /r/mycommunity/submit into /r/mycommunity
       const newPathname = pathname.split("/").slice(0, -1).join("/");
@@ -180,7 +180,7 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
     const payload: PostCreationRequest = {
       title: data.title,
       content: blocks,
-      subredditId,
+      communityId,
     };
 
     createPost(payload);

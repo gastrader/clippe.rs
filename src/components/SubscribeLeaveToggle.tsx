@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import { SubscribeToSubredditPayload } from "@/lib/validators/subreddit";
+import { SubscribeToCommunityPayload } from "@/lib/validators/community";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -10,14 +10,14 @@ import { useCustomToast } from "@/hooks/use-custom-toast";
 
 interface SubscribeLeaveToggleProps {
   isSubscribed: boolean;
-  subredditId: string;
-  subredditName: string;
+  communityId: string;
+  communityName: string;
 }
 
 const SubscribeLeaveToggle = ({
   isSubscribed,
-  subredditId,
-  subredditName,
+  communityId,
+  communityName,
 }: SubscribeLeaveToggleProps) => {
   const { toast } = useToast();
   const { loginToast } = useCustomToast();
@@ -25,8 +25,8 @@ const SubscribeLeaveToggle = ({
 
   const { mutate: subscribe, isLoading: isSubLoading } = useMutation({
     mutationFn: async () => {
-      const payload: SubscribeToSubredditPayload = {
-        subredditId,
+      const payload: SubscribeToCommunityPayload = {
+        communityId,
       };
 
       const { data } = await axios.post("/api/subreddit/subscribe", payload);
@@ -53,15 +53,15 @@ const SubscribeLeaveToggle = ({
       });
       toast({
         title: "Subscribed!",
-        description: `You are now subscribed to r/${subredditName}`,
+        description: `You are now subscribed to r/${communityName}`,
       });
     },
   });
 
   const { mutate: unsubscribe, isLoading: isUnsubLoading } = useMutation({
     mutationFn: async () => {
-      const payload: SubscribeToSubredditPayload = {
-        subredditId,
+      const payload: SubscribeToCommunityPayload = {
+        communityId,
       };
 
       const { data } = await axios.post("/api/subreddit/unsubscribe", payload);
@@ -82,7 +82,7 @@ const SubscribeLeaveToggle = ({
       });
       toast({
         title: "Unsubscribed!",
-        description: `You are now unsubscribed from/${subredditName}`,
+        description: `You are now unsubscribed from/${communityName}`,
       });
     },
   });

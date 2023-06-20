@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { toast } from "@/hooks/use-toast";
 import { useCustomToast } from "@/hooks/use-custom-toast";
-import { CreateSubredditPayload } from "@/lib/validators/subreddit";
+import { CreateCommunityPayload } from "@/lib/validators/community";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ const Page = () => {
 
   const { mutate: createCommunity, isLoading } = useMutation({
     mutationFn: async () => {
-      const payload: CreateSubredditPayload = {
+      const payload: CreateCommunityPayload = {
         name: input,
       };
 
@@ -28,7 +28,7 @@ const Page = () => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 409) {
           return toast({
-            title: "Subreddit already exists.",
+            title: "Community already exists.",
             description: "Please choose a different name.",
             variant: "destructive",
           });
@@ -36,7 +36,7 @@ const Page = () => {
 
         if (err.response?.status === 422) {
           return toast({
-            title: "Invalid subreddit name.",
+            title: "Invalid community name.",
             description: "Please choose a name between 3 and 21 letters.",
             variant: "destructive",
           });
@@ -49,12 +49,12 @@ const Page = () => {
 
       toast({
         title: "There was an error.",
-        description: "Could not create subreddit.",
+        description: "Could not create community.",
         variant: "destructive",
       });
     },
     onSuccess: (data) => {
-      router.push(`/r/${data}`);
+      router.push(`/c/${data}`);
     },
   });
 

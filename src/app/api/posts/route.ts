@@ -23,24 +23,24 @@ export async function GET(req: Request) {
   }
 
   try {
-    const { limit, page, subredditName } = z
+    const { limit, page, communityName } = z
       .object({
         limit: z.string(),
         page: z.string(),
-        subredditName: z.string().nullish().optional(),
+        communityName: z.string().nullish().optional(),
       })
       .parse({
-        subredditName: url.searchParams.get("subredditName"),
+        communityName: url.searchParams.get("communityName"),
         limit: url.searchParams.get("limit"),
         page: url.searchParams.get("page"),
       });
 
     let whereClause = {};
 
-    if (subredditName) {
+    if (communityName) {
       whereClause = {
         community: {
-          name: subredditName,
+          name: communityName,
         },
       };
     } else if (session) {
