@@ -10,13 +10,13 @@ interface pageProps {
 }
 
 const page = async ({ params }: pageProps) => {
-  const subreddit = await db.community.findFirst({
+  const community = await db.community.findFirst({
     where: {
       name: params.slug,
     },
   });
 
-  if (!subreddit) return notFound();
+  if (!community) return notFound();
 
   return (
     <div className="flex flex-col items-start gap-6">
@@ -33,7 +33,7 @@ const page = async ({ params }: pageProps) => {
       </div>
 
       {/* form */}
-      <Editor subredditId={subreddit.id} />
+      <Editor communityId={community.id} />
 
       <div className="w-full flex justify-end">
         <Button type="submit" className="w-full" form="subreddit-post-form">

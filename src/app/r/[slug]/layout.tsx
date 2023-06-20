@@ -99,8 +99,8 @@ const Layout = async ({
               {community.creatorId !== session?.user?.id ? (
                 <SubscribeLeaveToggle
                   isSubscribed={isSubscribed}
-                  subredditId={community.id}
-                  subredditName={community.name}
+                  communityId={community.id}
+                  communityName={community.name}
                 />
               ) : null}
               <Link

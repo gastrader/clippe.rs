@@ -12,7 +12,7 @@ import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-interface SubRedditPostPageProps {
+interface CommunityPostPageProps {
   params: {
     postId: string;
   };
@@ -21,7 +21,7 @@ interface SubRedditPostPageProps {
 // export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
-const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
+const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
   const cachedPost = (await redis.hgetall(
     `post:${params.postId}`
   )) as CachedPost;
@@ -107,4 +107,4 @@ function PostVoteShell() {
   );
 }
 
-export default SubRedditPostPage;
+export default CommunityPostPage;

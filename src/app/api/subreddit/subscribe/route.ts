@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     });
 
     if (subscriptionExists) {
-      return new Response("You've already subscribed to this subreddit", {
+      return new Response("You've already subscribed to this community", {
         status: 400,
       });
     }
