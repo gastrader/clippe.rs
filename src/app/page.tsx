@@ -6,6 +6,7 @@ import { HomeIcon } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
 
 export default async function Home() {
 
@@ -21,14 +22,14 @@ export default async function Home() {
         {/* SUBREDDIT INFO */}
         <div className="overflow-hidden h-fit rounded-lg border border-gray-200 order-first md:order-last">
           <div className="bg-emerald-100 px-6 py-4">
-            <p>
+            <p className="font-semibold py-3 flex items-center gap-1.5">
               <HomeIcon className="w-4 h-4"></HomeIcon> Home
             </p>
           </div>
           <div className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
             <div className="flex justify-between gap-x-4 py-3">
               <p className="text-zinc-500">
-                Person Homepage. Come here to check in with your favourite
+                Personal Homepage. Come here to check in with your favourite
                 communities
               </p>
             </div>
