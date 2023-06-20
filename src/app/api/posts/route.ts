@@ -39,13 +39,13 @@ export async function GET(req: Request) {
 
     if (subredditName) {
       whereClause = {
-        subreddit: {
+        community: {
           name: subredditName,
         },
       };
     } else if (session) {
       whereClause = {
-        subreddit: {
+        community: {
           id: {
             in: followedCommunitiesIds,
           },

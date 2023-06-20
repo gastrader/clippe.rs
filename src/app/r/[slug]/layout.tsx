@@ -25,7 +25,7 @@ const Layout = async ({
 }) => {
   const session = await getAuthSession();
 
-  const subreddit = await db.subreddit.findFirst({
+  const subreddit = await db.community.findFirst({
     where: { name: slug },
     include: {
       posts: {
@@ -41,7 +41,7 @@ const Layout = async ({
     ? undefined
     : await db.subscription.findFirst({
         where: {
-          subreddit: {
+          community: {
             name: slug,
           },
           user: {
@@ -56,7 +56,7 @@ const Layout = async ({
 
   const memberCount = await db.subscription.count({
     where: {
-      subreddit: {
+      community: {
         name: slug,
       },
     },
