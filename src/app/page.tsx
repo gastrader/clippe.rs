@@ -45,7 +45,7 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-          {/* @ts-expect-error server component*/}
+          
           <TopCommunities />
         </div>
       </div>
