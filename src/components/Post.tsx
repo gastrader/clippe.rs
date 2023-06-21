@@ -27,7 +27,7 @@ const Post: FC<PostProps> = ({
 }) => {
   const pRef = useRef<HTMLDivElement>(null);
   return (
-    <div className="rounded-md bg-white shadow">
+    <div className="rounded-2xl bg-white shadow-md">
       <div className="px-6 py-4 flex justify-between">
         <PostVoteClient
           initialVotesAmt={votesAmt}
@@ -67,7 +67,7 @@ const Post: FC<PostProps> = ({
         </div>
       </div>
 
-      <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6">
+      <div className="bg-gray-50 z-20 text-sm p-4 sm:px-6 rounded-b-2xl">
         <a
           className="w-fit flex items-center gap-2"
           href={`/c/${communityName}/post/${post.id}`}
