@@ -2,6 +2,7 @@ import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CommentValidator } from "@/lib/validators/comment";
 import { z } from "zod";
+import { redis } from "../../../../../lib/redis";
 
 export async function PATCH(req: Request) {
   try {
@@ -15,7 +16,6 @@ export async function PATCH(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    // if no existing vote, create a new vote
     await db.comment.create({
       data: {
         text,
@@ -24,6 +24,26 @@ export async function PATCH(req: Request) {
         replyToId,
       },
     });
+
+    if (replyToId) {
+      const parentCommentAuthor = await db.comment.findUnique({
+        where: {
+          id: replyToId,
+        },
+        select: {
+          authorId: true,
+        },
+      });
+      if (parentCommentAuthor) {
+        await redis.lpush(
+          `notifications:${[parentCommentAuthor.authorId]}`,
+          JSON.stringify({
+            type: "comment_reply",
+            postId,
+          })
+        );
+      }
+    }
 
     return new Response("OK");
   } catch (error) {

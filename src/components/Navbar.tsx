@@ -5,6 +5,8 @@ import { Icons } from "./Icons";
 import { buttonVariants } from "./ui/Button";
 import { UserAccountNav } from "./UserAccountNav";
 import SearchBar from "./SearchBar";
+import NotificationsPopoverServer from "./notifications/NotificationsPopoverServer";
+import { Suspense } from "react";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -24,7 +26,11 @@ const Navbar = async () => {
 
         {/* actions */}
         {session?.user ? (
-          <UserAccountNav user={session.user} />
+          <>
+            <UserAccountNav user={session.user} />
+            {/* @ts-expect-error server component*/}
+            <NotificationsPopoverServer />
+          </>
         ) : (
           <Link href="/sign-in" className={buttonVariants()}>
             Sign In
