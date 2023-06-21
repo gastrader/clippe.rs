@@ -1,5 +1,6 @@
 import CustomFeed from "@/components/CustomFeed";
 import GeneralFeed from "@/components/GeneralFeed";
+import TopCommunities from "@/components/TopCommunities";
 import { buttonVariants } from "@/components/ui/Button";
 import { getAuthSession } from "@/lib/auth";
 import { HomeIcon } from "lucide-react";
@@ -18,29 +19,33 @@ export default async function Home() {
         {/* FEED GOES HERE */}
         {/* @ts-expect-error server component*/}
         {session ? <CustomFeed /> : <GeneralFeed />}
-        {/* COMMUNITY INFO */}
-        <div className="overflow-hidden h-fit rounded-lg border border-gray-200 order-first md:order-last">
-          <div className="bg-emerald-100 px-6 py-4">
-            <p className="font-semibold py-3 flex items-center gap-1.5">
-              <HomeIcon className="w-4 h-4"></HomeIcon> Home
-            </p>
-          </div>
-          <div className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
-            <div className="flex justify-between gap-x-4 py-3">
-              <p className="text-zinc-500">
-                Personal Homepage. Come here to check in with your favourite
-                communities
+        {/* COMMUNITY INFO AND NEW COMPONENT*/}
+        <div className="order-first md:order-last">
+          <div className="overflow-hidden h-fit rounded-lg border border-gray-200">
+            <div className="bg-emerald-100 px-6 py-4">
+              <p className="font-semibold py-3 flex items-center gap-1.5">
+                <HomeIcon className="w-4 h-4"></HomeIcon> Home
               </p>
             </div>
-            <Link
-              className={buttonVariants({
-                className: "w-full mt-4 mb-6",
-              })}
-              href="/c/create"
-            >
-              Create Community
-            </Link>
+            <div className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
+              <div className="flex justify-between gap-x-4 py-3">
+                <p className="text-zinc-500">
+                  Personal Homepage. Come here to check in with your favourite
+                  communities
+                </p>
+              </div>
+              <Link
+                className={buttonVariants({
+                  className: "w-full mt-4 mb-6",
+                })}
+                href="/c/create"
+              >
+                Create Community
+              </Link>
+            </div>
           </div>
+          {/* @ts-expect-error server component*/}
+          <TopCommunities />
         </div>
       </div>
     </>
