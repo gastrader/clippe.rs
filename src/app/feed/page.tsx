@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import React, { FC } from "react";
 import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
-import PostFeed from "@/components/PostFeed";
+import UserFeed from "@/components/UserFeed";
 
 interface PageProps {
   params: {
@@ -41,10 +41,9 @@ const page = async ({ params }: PageProps) => {
         c/{community.name}
       </h1>
       <MiniCreatePost session={session} />
-      <PostFeed
+      <UserFeed
         // initialPosts={community.posts}
         initialPosts={[]}
-        communityName={community.name}
         filterType="new"
       />
     </>

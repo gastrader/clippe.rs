@@ -9,11 +9,12 @@ import PostFeed from "@/components/PostFeed";
 interface PageProps {
   params: {
     slug: string;
+    filter?: string;
   };
 }
 
 const page = async ({ params }: PageProps) => {
-  const { slug } = params;
+  const { slug, filter = "new" } = params;
 
   const session = await getAuthSession();
   const community = await db.community.findFirst({
@@ -27,7 +28,7 @@ const page = async ({ params }: PageProps) => {
           community: true,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: "asc",
         },
         take: INFINITE_SCROLLING_PAGINATION_RESULTS,
       },
@@ -45,7 +46,7 @@ const page = async ({ params }: PageProps) => {
         // initialPosts={community.posts}
         initialPosts={[]}
         communityName={community.name}
-        filterType="new"
+        filterType={filter}
       />
     </>
   );

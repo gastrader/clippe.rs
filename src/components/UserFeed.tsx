@@ -10,17 +10,12 @@ import { FC, useEffect, useRef } from "react";
 import Post from "./Post";
 import { useSession } from "next-auth/react";
 
-interface PostFeedProps {
+interface UserFeedProps {
   initialPosts: ExtendedPost[];
-  communityName?: string;
   filterType: string;
 }
 
-const PostFeed: FC<PostFeedProps> = ({
-  initialPosts,
-  communityName,
-  filterType,
-}) => {
+const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
   const lastPostRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
@@ -29,14 +24,13 @@ const PostFeed: FC<PostFeedProps> = ({
   const { data: session } = useSession();
 
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ["infinite-query", communityName, filterType],
+    ["infinite-query", filterType],
     async ({ pageParam = 1 }) => {
-      const { data } = await axios.get("/api/posts", {
+      const { data } = await axios.get("/api/feed", {
         params: {
           limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
           page: pageParam,
           filter: filterType, // new, old, top...
-          communityName: communityName,
         },
       });
       return data as ExtendedPost[];
@@ -55,7 +49,7 @@ const PostFeed: FC<PostFeedProps> = ({
     if (entry?.isIntersecting) {
       fetchNextPage(); // Load more posts when the last post comes into view
     }
-  }, [entry, fetchNextPage, ]);
+  }, [entry, fetchNextPage, filterType]);
 
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
 
@@ -113,4 +107,4 @@ const PostFeed: FC<PostFeedProps> = ({
   );
 };
 
-export default PostFeed;
+export default UserFeed;
