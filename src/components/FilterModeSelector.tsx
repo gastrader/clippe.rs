@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 
 export const FilterModeSelector = () => {
   const { slug, filter = "new" } = useParams();
+  
 
   return (
     <div className="flex gap-2">

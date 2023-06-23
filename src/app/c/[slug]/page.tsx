@@ -5,6 +5,7 @@ import React, { FC } from "react";
 import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
 import PostFeed from "@/components/PostFeed";
+import { FilterModeSelectorC } from "@/components/FilterModeSelectorC";
 
 interface PageProps {
   params: {
@@ -40,6 +41,7 @@ const page = async ({ params }: PageProps) => {
         {" "}
         c/{community.name}
       </h1>
+      <FilterModeSelectorC />
       <MiniCreatePost session={session} />
       <PostFeed
         // initialPosts={community.posts}

@@ -7,7 +7,8 @@ import { getAuthSession } from "@/lib/auth";
 import { HomeIcon, Rocket, Sparkles, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import NotificationsPopoverServer from "../components/notifications/NotificationsPopoverServer";
-import { Tabs, TabsList } from "@/components/ui/Tabs";
+
+import { FilterModeSelectorF } from "@/components/FilterModeSelectorF";
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
@@ -19,31 +20,14 @@ export default async function Home() {
     <>
       <h1 className="font-bold text-3xl md:text-4xl">Your feed</h1>
       <div className="space-x-2 mt-4">
-        <Link
-          className={buttonVariants({ variant: "subtle" })}
-          href="/feed/best"
-        >
-          <TrendingUp className="mr-2"></TrendingUp>
-          Best
-        </Link>
-        <Link
-          className={buttonVariants({ variant: "subtle" })}
-          href="/feed/new"
-        >
-          <Sparkles className="mr-2"></Sparkles>
-          New
-        </Link>
+        <FilterModeSelectorF />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
         {/* FEED GOES HERE */}
 
-        {session ? (
-          <>
+
             <UserFeed filterType="new" initialPosts={[]} />
-          </>
-          ) : (
-            <PostFeed filterType="new" initialPosts={[]} communityName="xqc" />
-        )}
+
         {/* COMMUNITY INFO AND NEW COMPONENT*/}
         <div className="order-first md:order-last">
           <div className="overflow-hidden h-fit rounded-lg border border-gray-200">

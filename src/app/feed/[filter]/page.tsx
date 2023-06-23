@@ -1,20 +1,22 @@
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import React, { FC } from "react";
+import React from "react";
 import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
-import UserFeed from "@/components/UserFeed";
+
 import { FilterModeSelectorF } from "@/components/FilterModeSelectorF";
+import UserFeed from "@/components/UserFeed";
 
 interface PageProps {
   params: {
     slug: string;
+    filter?: string;
   };
 }
 
 const page = async ({ params }: PageProps) => {
-  const { slug } = params;
+  const { slug, filter = "new" } = params;
 
   const session = await getAuthSession();
   const community = await db.community.findFirst({
@@ -28,7 +30,7 @@ const page = async ({ params }: PageProps) => {
           community: true,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: "asc",
         },
         take: INFINITE_SCROLLING_PAGINATION_RESULTS,
       },
@@ -45,7 +47,7 @@ const page = async ({ params }: PageProps) => {
       <UserFeed
         // initialPosts={community.posts}
         initialPosts={[]}
-        filterType="new"
+        filterType={filter}
       />
     </>
   );
