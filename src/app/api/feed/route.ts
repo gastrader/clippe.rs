@@ -1,7 +1,7 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
-import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
+
 // Feed of posts for when the user is logged in
 export async function GET(req: Request) {
   const url = new URL(req.url);

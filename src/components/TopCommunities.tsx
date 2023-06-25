@@ -16,7 +16,7 @@ type CommunitySubs = {
 const TopCommunities = () => {
   const { isLoading, data } = useQuery(["topCommunities"], async () => {
     const { data } = await axios.get("/api/community/size");
-    console.log("The data is: ---------------", data)
+    
     return data;
   },
     {

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const SignIn = () => {
   return (
-    <div className="container mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
+    <div className="container mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px] mb-20">
       <div className="flex flex-col space-y-2 text-center">
         <Icons.logo className="mx-auto h-6 w-6" />
         <h1 className="text-2xl font-semibold tracking-tight">Sign Up</h1>
@@ -14,7 +14,7 @@ const SignIn = () => {
         </p>
       </div>
       <UserAuthForm />
-      <p className="px-8 text-center text-sm text-muted-foreground">
+      <div className="px-8 text-center text-sm text-muted-foreground pb-8">
         Already a Clipper?{" "}
         <Link
           href="/sign-in"
@@ -22,7 +22,7 @@ const SignIn = () => {
         >
           Sign Up
         </Link>
-      </p>
+      </div>
     </div>
   );
 };

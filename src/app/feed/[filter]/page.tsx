@@ -38,10 +38,8 @@ const page = async ({ params }: PageProps) => {
   });
   if (!community) return notFound();
   return (
-    <>
-      <h1 className="font-bold text-3xl md:text-4xl h-14 mt-20">
-        Feed
-      </h1>
+    <div className="space-y-6">
+      <h1 className="font-bold text-3xl md:text-4xl h-14">Feed</h1>
       <FilterModeSelectorF />
       <MiniCreatePost session={session} />
       <UserFeed
@@ -49,7 +47,7 @@ const page = async ({ params }: PageProps) => {
         initialPosts={[]}
         filterType={filter}
       />
-    </>
+    </div>
   );
 };
 

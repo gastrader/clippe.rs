@@ -36,8 +36,8 @@ const page = async ({ params }: PageProps) => {
   });
   if (!community) return notFound();
   return (
-    <>
-      <h1 className="font-bold text-3xl md:text-4xl h-14 mt-20">
+    <div className="space-y-6">
+      <h1 className="font-bold text-3xl md:text-4xl h-14">
         Feed
       </h1>
       <FilterModeSelectorF />
@@ -47,7 +47,7 @@ const page = async ({ params }: PageProps) => {
         initialPosts={[]}
         filterType="new"
       />
-    </>
+    </div>
   );
 };
 

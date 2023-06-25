@@ -18,15 +18,12 @@ export default async function Home() {
 
   return (
     <>
-      <h1 className="font-bold text-3xl md:text-4xl">Your feed</h1>
-      <div className="space-x-2 mt-4">
+      <h1 className="font-bold text-3xl md:text-4xl h-14">Your feed</h1>
+      <div className="space-x-2">
         <FilterModeSelectorF />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
-        {/* FEED GOES HERE */}
-
-
-            <UserFeed filterType="new" initialPosts={[]} />
+        <UserFeed filterType="new" initialPosts={[]} />
 
         {/* COMMUNITY INFO AND NEW COMPONENT*/}
         <div className="order-first md:order-last">
@@ -43,14 +40,22 @@ export default async function Home() {
                   communities
                 </p>
               </div>
-              <Link
-                className={buttonVariants({
-                  className: "w-full mt-4 mb-6",
-                })}
-                href="/c/create"
-              >
-                Create Community
-              </Link>
+                  <Link
+                    className={buttonVariants({
+                      className: "w-full mt-4",
+                    })}
+                    href="/c/create"
+                  >
+                    Create Community
+                  </Link>
+                  <Link
+                    className={buttonVariants({
+                      className: "w-full mt-4 mb-6",
+                    })}
+                    href="/feed/create"
+                  >
+                    Create Custom Feed
+                  </Link>
             </div>
           </div>
 

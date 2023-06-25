@@ -50,6 +50,17 @@ model User {
   votes                 Vote[]
   subscriptions         Subscription[]
   account               Account[]
+  feeds                 Feed[]
+}
+
+model Feed {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  communities Community[]
 }
 
 model CommunityModerator {
@@ -71,6 +82,8 @@ model Community {
   creator     User?                @relation("CreatedBy", fields: [creatorId], references: [id])
   subscribers Subscription[]
   moderators  CommunityModerator[]
+  Feed        Feed?                @relation(fields: [feedId], references: [id])
+  feedId      String?
 
   @@index([name])
 }

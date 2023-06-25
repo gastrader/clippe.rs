@@ -1,7 +1,7 @@
 
 import FeedCreate from "@/components/FeedCreate";
 import { buttonVariants } from "@/components/ui/Button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
+
 import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";

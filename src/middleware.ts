@@ -12,5 +12,5 @@ export async function middleware(req: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/c/:path*/submit", "/c/create"],
+  matcher: ["/c/:path*/submit", "/c/create", "/feed/create"],
 };

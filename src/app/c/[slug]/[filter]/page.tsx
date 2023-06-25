@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
 import PostFeed from "@/components/PostFeed";
 import { FilterModeSelectorC } from "@/components/FilterModeSelectorC";
+import AboutCommunity from "@/components/AboutCommunity";
+
 
 interface PageProps {
   params: {
@@ -43,13 +45,23 @@ const page = async ({ params }: PageProps) => {
         c/{community.name}
       </h1>
       <FilterModeSelectorC />
-      <MiniCreatePost session={session} />
-      <PostFeed
-        // initialPosts={community.posts}
-        initialPosts={[]}
-        communityName={community.name}
-        filterType={filter}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
+        <div className="md:col-span-2 space-y-6">
+          <MiniCreatePost session={session} />
+          <PostFeed
+            // initialPosts={community.posts}
+            initialPosts={[]}
+            communityName={community.name}
+            filterType={filter}
+          />
+        </div>
+        <div className="order-first md:order-last">
+          <div className="overflow-hidden h-fit rounded-lg border border-gray-200">
+            {/* @ts-ignore server component */}
+            <AboutCommunity params={slug} />
+          </div>
+        </div>
+      </div>
     </>
   );
 };

@@ -1,7 +1,9 @@
 import CommentSection from "@/components/CommentSection";
 import CommentsSection from "@/components/CommentSection";
 import EditorOutput from "@/components/EditorOutput";
+import ToFeedButton from "@/components/ToFeedButton";
 import PostVoteServer from "@/components/post-vote/PostVoteServer";
+import RecommendedPosts from "@/components/RecommendedPosts";
 import { buttonVariants } from "@/components/ui/Button";
 import { db } from "@/lib/db";
 import { redis } from "@/lib/redis";
@@ -44,42 +46,56 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
 
   return (
     <div>
-      <div className="h-full flex flex-col sm:flex-row items-center sm:items-start justify-between">
-        <Suspense fallback={<PostVoteShell />}>
-          {/* @ts-expect-error server component */}
-          <PostVoteServer
-            postId={post?.id ?? cachedPost.id}
-            getData={async () => {
-              return await db.post.findUnique({
-                where: {
-                  id: params.postId,
-                },
-                include: {
-                  votes: true,
-                },
-              });
-            }}
-          />
-        </Suspense>
+      <ToFeedButton />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
+        <div className="md:col-span-2 space-y-6 w-full">
+          <div className="flex flex-row">
+            <Suspense fallback={<PostVoteShell />}>
+              {/* @ts-expect-error server component */}
+              <PostVoteServer
+                postId={post?.id ?? cachedPost.id}
+                getData={async () => {
+                  return await db.post.findUnique({
+                    where: {
+                      id: params.postId,
+                    },
+                    include: {
+                      votes: true,
+                    },
+                  });
+                }}
+              />
+            </Suspense>
 
-        <div className="sm:w-0 w-full flex-1 bg-white p-4 rounded-sm">
-          <p className="max-h-40 mt-1 truncate text-xs text-gray-500">
-            Posted by u/{post?.author.username ?? cachedPost.authorUsername}{" "}
-            {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.createdAt))}
-          </p>
-          <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
-            {post?.title ?? cachedPost.title}
-          </h1>
+            <div className="sm:w-0 w-full flex-1 bg-white p-4 rounded-sm ">
+              <p className="max-h-40 mt-1 truncate text-xs text-gray-500">
+                Posted by u/{post?.author.username ?? cachedPost.authorUsername}{" "}
+                {formatTimeToNow(
+                  new Date(post?.createdAt ?? cachedPost.createdAt)
+                )}
+              </p>
+              <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
+                {post?.title ?? cachedPost.title}
+              </h1>
 
-          <EditorOutput content={post?.content ?? cachedPost.content} />
-          <Suspense
-            fallback={
-              <Loader2 className="h-5 w-5 animate-spin text-zinc-500" />
-            }
-          >
-            {/* @ts-expect-error Server Component */}
-            <CommentSection postId={post?.id ?? cachedPost.id} />
-          </Suspense>
+              <EditorOutput content={post?.content ?? cachedPost.content} />
+
+              <div className="">
+                <Suspense
+                  fallback={
+                    <Loader2 className="h-5 w-5 animate-spin text-zinc-500" />
+                  }
+                >
+                  {/* @ts-expect-error Server Component */}
+                  <CommentSection postId={post?.id ?? cachedPost.id} />
+                </Suspense>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="order-first md:order-last">
+          {/* @ts-ignore*/}
+          <RecommendedPosts />
         </div>
       </div>
     </div>
