@@ -69,7 +69,8 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
               />
             </Suspense>
 
-            <div className="sm:w-0 w-full flex-1 bg-white p-4 rounded-sm ">
+            <div className="sm:w-0 w-full flex-1 bg-white p-4 rounded-sm">
+              <div>
               <p className="max-h-40 mt-1 truncate text-xs text-gray-500">
                 Posted by u/{post?.author.username ?? cachedPost.authorUsername}{" "}
                 {formatTimeToNow(
@@ -112,9 +113,9 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
                   </Badge>
                 </p>
               )}
-              <EditorOutput content={post?.embedurl ?? cachedPost.embedurl} />
+              <EditorOutput content={post?.embedurl ?? cachedPost.embedurl} sitename={post?.sitename ?? cachedPost.sitename} />
 
-              <div className="">
+              
                 <Suspense
                   fallback={
                     <Loader2 className="h-5 w-5 animate-spin text-zinc-500" />

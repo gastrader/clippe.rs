@@ -32,12 +32,39 @@ export async function POST(req: Request) {
         }
       );
     }
+    const linkUrl = new URL(url);
+        const embededUrl = null;
+        const siteName = null;
+        const channel = null;
+
+     if (linkUrl.hostname.includes("kick.com")) {
+      console.log("WE ARE IN THE KICK BACKEND")
+       const siteName = "Kick";
+       let pathName = linkUrl.pathname.slice(1);
+       let channel = pathName.split("/")[0];
+       channel = channel.charAt(0).toUpperCase()+ channel.slice(1)
+       const embedUrl = linkUrl;
+       console.log(
+         `Embeded URL: ${url}, Site Name: ${siteName}, Channel: ${channel}`
+       );
+       await db.post.create({
+         data: {
+           title,
+           url,
+           tag,
+           sitename: siteName,
+           embedurl: url,
+           channel: channel,
+           authorId: session.user.id,
+           communityId,
+         },
+       });
+       return new Response(communityId);
+     }
     const response = await axios.get(url);
     const pageData = response.data;
-    const linkUrl = new URL(url);
-    const embededUrl = null;
-    const siteName = null;
-    const channel = null;
+    
+
 
     if (linkUrl.hostname.includes("twitch.tv")) {
       const urlRegex = /<meta property="og:video:secure_url" content="(.*?)"/;
@@ -70,7 +97,6 @@ export async function POST(req: Request) {
       });
     }
     if (linkUrl.hostname.includes("youtube.com")) {
-      console.log("---------WE ARE IN YOUTUBE----------------");
       const urlRegex = /<meta property="og:video:url" content="(.*?)"/;
       const urlMatch = pageData.match(urlRegex);
       const embededUrl2 = urlMatch ? urlMatch[1] : null;
@@ -99,7 +125,8 @@ export async function POST(req: Request) {
           communityId,
         },
       });
-    }
+    } 
+
 
     return new Response(communityId);
   } catch (error) {
@@ -107,7 +134,6 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 400 });
     }
-
     return new Response(
       "Could not post to the community at this time. Please try later",
       { status: 500 }

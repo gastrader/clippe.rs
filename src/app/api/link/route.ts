@@ -30,7 +30,7 @@ export async function GET(req: Request) {
     channel = titleAndChannelMatch ? titleAndChannelMatch[2] : "";
     const siteNameMatch = res.data.match(/<meta property="og:site_name" content="(.*?)">/);
     site_name = siteNameMatch ? siteNameMatch[1] : "";
- }
+ } 
 
  console.log("The channel is:", channel);
  console.log("The title is:", title);

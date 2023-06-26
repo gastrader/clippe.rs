@@ -34,7 +34,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const urlValidator = (url: string) => {
   const regex =
-    /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be|clips\.twitch\.tv)\/.+$/;
+    /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be|clips\.twitch\.tv|kick\.com)\/.+$/;
   return regex.test(url);
 };
 
@@ -81,14 +81,14 @@ export const Editor2: React.FC<Editor2Props> = ({ communityId }) => {
   const router = useRouter();
   const pathname = usePathname();
   function onSubmit(data: ProfileFormValues) {
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 3)}</code>
-    //     </pre>
-    //   ),
-    // });
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 3)}</code>
+        </pre>
+      ),
+    });
     
     const payload: PostCreationRequest = {
         communityId,
@@ -119,7 +119,8 @@ export const Editor2: React.FC<Editor2Props> = ({ communityId }) => {
         });
       } else {
         return toast({
-          title: "Something went wrong.",
+          
+          title: "Something went wrong {error}",
           description: "Your post was not published. Please try again.",
           variant: "destructive",
         });

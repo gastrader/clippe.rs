@@ -4,7 +4,7 @@ import { FeedValidator } from "@/lib/validators/feed";
 import { z } from "zod";
 
 export async function POST(req: Request) {
-  console.log("THE REQUEST IS:", req)
+  console.log("THE REQUEST IS:", req);
   try {
     const session = await getAuthSession();
 
@@ -25,18 +25,31 @@ export async function POST(req: Request) {
     if (feedExists) {
       return new Response("Feed name already exists", { status: 409 });
     }
-    const communityIds = communities.map((community: { id: any; }) => community.id);
+
+    const communityIds = communities.map(
+      (community: { id: any }) => community.id
+    );
+
+    // Create the new feed
     const feed = await db.feed.create({
       data: {
         name: feedName,
         userId: session.user.id,
-        communities: {
-          connect: communityIds.map((id: any) => ({
-            id,
-          })),
-        },
       },
     });
+
+    // Connect the communities to the new feed using the intermediate table
+    await Promise.all(
+      communityIds.map(async (communityId: string) => {
+        await db.communityFeed.create({
+          data: {
+            communityId,
+            feedId: feed.id,
+          },
+        });
+      })
+    );
+
     console.log("THE FEED NAME SHOULD BE: ", feed.name);
     return new Response(feed.id);
   } catch (error) {

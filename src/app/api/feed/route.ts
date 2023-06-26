@@ -11,11 +11,12 @@ export async function GET(req: Request) {
   // if (!session) return new Response("Could!!! not fetch posts", { status: 500 });
 
     try {
-      const { limit, page, filter } = z
+      const { limit, page, filter, feed } = z
         .object({
           limit: z.string(),
           page: z.string(),
           filter: z.enum(["new", "old"]).optional(),
+          feed: z.string().optional()
         })
         .parse({
           limit: url.searchParams.get("limit"),

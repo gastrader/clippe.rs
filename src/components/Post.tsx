@@ -1,20 +1,13 @@
 import { formatTimeToNow } from "@/lib/utils";
 import { Post, User, Vote } from "@prisma/client";
-import { MessageSquare } from "lucide-react";
-import React, { FC, useRef } from "react";
-import EditorOutput from "./EditorOutput";
+import { Link, MessageSquare } from "lucide-react";
+import React, { FC, useRef, useState } from "react";
+
 import PostVoteClient from "./post-vote/PostVoteClient";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/Form";
+
 import { Badge } from "./ui/Badge";
 import Image from "next/image";
+import { Skeleton } from "./ui/Skeleton";
 type PartialVote = Pick<Vote, "type">;
 
 interface PostProps {
@@ -38,6 +31,7 @@ const Post: FC<PostProps> = ({
   url,
 }) => {
   const pRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
   return (
     <div className="rounded-2xl bg-white shadow-md">
       <div className="px-6 py-4 flex justify-between">
@@ -65,11 +59,13 @@ const Post: FC<PostProps> = ({
           <a href={`/c/${communityName}/post/${post.id}`}>
             <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
               <div
-                className={`text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 ${
+                className={`text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 text-white ${
                   post.sitename === "Twitch"
                     ? "bg-purple-500"
                     : post.sitename === "YouTube"
                     ? "bg-red-500"
+                    : post.sitename === "Kick"
+                    ? "bg-green-400"
                     : ""
                 }`}
               >
@@ -82,11 +78,13 @@ const Post: FC<PostProps> = ({
                   />
                 ) : post.sitename === "YouTube" ? (
                   <Image
-                    src="/youtube.png" // replace with actual URL of Youtube image
+                    src="/youtube.png"
                     alt="youtube"
                     width={20}
                     height={20}
                   />
+                ) : post.sitename === "Kick" ? (
+                  <Image src="/kick.png" alt="kick" width={15} height={15} />
                 ) : null}
                 {post.channel}
               </div>
@@ -99,15 +97,34 @@ const Post: FC<PostProps> = ({
               </p>
             )}
           </a>
-          <div className="relative text-sm h-[500px] w-full" ref={pRef}>
-            <iframe
-              src={url}
-              height="100%"
-              width="100%"
-              frameBorder="0"
-              scrolling="no"
-              allowFullScreen={true}
-            ></iframe>
+          <div
+            className="relative text-sm h-fit w-full  overflow-clip"
+            ref={pRef}
+          >
+            {post.sitename === "Kick" ? (
+              <div className="h-fit">
+                <a
+                  href={post.embedurl || "kick.com"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline flex items-center text-sm text-blue-800"
+                >
+                  {post.embedurl || "Unavailable"}{" "}
+                  <Link className="ml-1 h-4 w-4" />
+                </a>
+              </div>
+            ) : (
+              // {loading && <Skeleton className="w-full h-[500px] rounded-xl " />}
+              <iframe
+                src={url}
+                height="500"
+                width="100%"
+                frameBorder="0"
+                scrolling="no"
+                allowFullScreen={true}
+                onLoad={() => setLoading(false)}
+              ></iframe>
+            )}
           </div>
         </div>
       </div>

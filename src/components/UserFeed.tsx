@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import { FC, useEffect, useRef } from "react";
 import Post from "./Post";
 import { useSession } from "next-auth/react";
+import { Skeleton } from "./ui/Skeleton";
 
 interface UserFeedProps {
   initialPosts: ExtendedPost[];
@@ -23,7 +24,7 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
   });
   const { data: session } = useSession();
 
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching } = useInfiniteQuery(
     ["infinite-query", filterType],
     async ({ pageParam = 1 }) => {
       const { data } = await axios.get("/api/feed", {
@@ -31,6 +32,7 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
           limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
           page: pageParam,
           filter: filterType, // new, old, top...
+          feed: "wyzia"
         },
       });
       return data as ExtendedPost[];
@@ -55,50 +57,54 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
-      {posts.map((post, index) => {
-        const votesAmt = post.votes.reduce(
-          (acc: number, vote: { type: string }) => {
-            if (vote.type === "UP") return acc + 1;
-            if (vote.type === "DOWN") return acc - 1;
-            return acc;
-          },
-          0
-        );
+      {isLoading
+        ? [1, 2].map((n) => (
+            <Skeleton className="w-full h-[600px] rounded-xl" key={n} />
+          )) :
+        posts.map((post, index) => {
+            const votesAmt = post.votes.reduce(
+              (acc: number, vote: { type: string }) => {
+                if (vote.type === "UP") return acc + 1;
+                if (vote.type === "DOWN") return acc - 1;
+                return acc;
+              },
+              0
+            );
 
-        const currentVote = post.votes.find(
-          (vote: { userId: string | undefined }) =>
-            vote.userId === session?.user.id
-        );
+            const currentVote = post.votes.find(
+              (vote: { userId: string | undefined }) =>
+                vote.userId === session?.user.id
+            );
 
-        if (index === posts.length - 1) {
-          // Add a ref to the last post in the list
-          return (
-            <li key={post.id} ref={ref}>
-              <Post
-                url={post.embedurl}
-                key={post.id}
-                post={post}
-                commentAmt={post.comments.length}
-                communityName={post.community.name}
-                votesAmt={votesAmt}
-                currentVote={currentVote}
-              />
-            </li>
-          );
-        } else {
-          return (
-            <Post
-              url={post.embedurl}
-              key={post.id}
-              post={post}
-              commentAmt={post.comments.length}
-              communityName={post.community.name}
-              votesAmt={votesAmt}
-              currentVote={currentVote}
-            />
-          );
-        }
-      })}
+            if (index === posts.length - 1) {
+              // Add a ref to the last post in the list
+              return (
+                <li key={post.id} ref={ref}>
+                  <Post
+                    url={post.embedurl}
+                    key={post.id}
+                    post={post}
+                    commentAmt={post.comments.length}
+                    communityName={post.community.name}
+                    votesAmt={votesAmt}
+                    currentVote={currentVote}
+                  />
+                </li>
+              );
+            } else {
+              return (
+                <Post
+                  url={post.embedurl}
+                  key={post.id}
+                  post={post}
+                  commentAmt={post.comments.length}
+                  communityName={post.community.name}
+                  votesAmt={votesAmt}
+                  currentVote={currentVote}
+                />
+              );
+            }
+          })}
 
       {isFetchingNextPage && (
         <li className="flex justify-center">

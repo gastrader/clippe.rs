@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import { FC, useEffect, useRef } from "react";
 import Post from "./Post";
 import { useSession } from "next-auth/react";
+import { Skeleton } from "./ui/Skeleton";
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
@@ -27,42 +28,45 @@ const PostFeed: FC<PostFeedProps> = ({
     threshold: 1,
   });
   const { data: session } = useSession();
+  
 
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ["infinite-query", communityName, filterType],
-    async ({ pageParam = 1 }) => {
-      const { data } = await axios.get("/api/posts", {
-        params: {
-          limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
-          page: pageParam,
-          filter: filterType, // new, old, top...
-          communityName: communityName,
-
-        },
-      });
-      return data as ExtendedPost[];
-    },
-    {
-      getNextPageParam: (_, pages) => {
-        return pages.length + 1;
+  const { data, fetchNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery(
+      ["infinite-query", communityName, filterType],
+      async ({ pageParam = 1 }) => {
+        const { data } = await axios.get("/api/posts", {
+          params: {
+            limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
+            page: pageParam,
+            filter: filterType, // new, old, top...
+            communityName: communityName,
+          },
+        });
+        return data as ExtendedPost[];
       },
-      initialData: { pages: [initialPosts], pageParams: [1] },
-      staleTime: 0,
-      cacheTime: 0,
-    }
-  );
+      {
+        getNextPageParam: (_, pages) => {
+          return pages.length + 1;
+        },
+        initialData: { pages: [initialPosts], pageParams: [1] },
+        staleTime: 0,
+        cacheTime: 0,
+      }
+    );
 
   useEffect(() => {
     if (entry?.isIntersecting) {
       fetchNextPage(); // Load more posts when the last post comes into view
     }
-  }, [entry, fetchNextPage, ]);
+  }, [entry, fetchNextPage]);
 
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
-      {posts.map((post, index) => {
+      {isLoading
+    ? [1, 2, 3, 4, 5].map((n) => <Skeleton className="w-full h-[600px] rounded-xl" key={n} />) : // Display 5 skeleton posts while loading
+     posts.map((post, index) => {
         const votesAmt = post.votes.reduce(
           (acc: number, vote: { type: string }) => {
             if (vote.type === "UP") return acc + 1;
@@ -107,12 +111,13 @@ const PostFeed: FC<PostFeedProps> = ({
         }
       })}
 
-      {isFetchingNextPage && (
-        <li className="flex justify-center">
-          <Loader2 className="w-6 h-6 text-zinc-500 animate-spin" />
-        </li>
-      )}
-    </ul>
+  {isFetchingNextPage && (
+    <li className="flex justify-center">
+      <Loader2 className="w-6 h-6 text-zinc-500 animate-spin" />
+    </li>
+  )}
+</ul>
+    
   );
 };
 

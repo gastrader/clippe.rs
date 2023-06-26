@@ -9,21 +9,26 @@ import Link from "next/link";
 import NotificationsPopoverServer from "../components/notifications/NotificationsPopoverServer";
 
 import { FilterModeSelectorF } from "@/components/FilterModeSelectorF";
+import {FeedSelector} from "@/components/FeedSelector";
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
 export default async function Home() {
   const session = await getAuthSession();
-
+  
   return (
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">Your feed</h1>
-      <div className="space-x-2">
+      <div className="space-x-2 flex flex-row">
         <FilterModeSelectorF />
+        <FeedSelector />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
-        <UserFeed filterType="new" initialPosts={[]} />
+        <UserFeed
+          filterType="new"
+          initialPosts={[]}
+        />
 
         {/* COMMUNITY INFO AND NEW COMPONENT*/}
         <div className="order-first md:order-last">
@@ -40,22 +45,22 @@ export default async function Home() {
                   communities
                 </p>
               </div>
-                  <Link
-                    className={buttonVariants({
-                      className: "w-full mt-4",
-                    })}
-                    href="/c/create"
-                  >
-                    Create Community
-                  </Link>
-                  <Link
-                    className={buttonVariants({
-                      className: "w-full mt-4 mb-6",
-                    })}
-                    href="/feed/create"
-                  >
-                    Create Custom Feed
-                  </Link>
+              <Link
+                className={buttonVariants({
+                  className: "w-full mt-4",
+                })}
+                href="/c/create"
+              >
+                Create Community
+              </Link>
+              <Link
+                className={buttonVariants({
+                  className: "w-full mt-4 mb-6",
+                })}
+                href="/feed/create"
+              >
+                Create Custom Feed
+              </Link>
             </div>
           </div>
 
