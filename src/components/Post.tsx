@@ -4,7 +4,17 @@ import { MessageSquare } from "lucide-react";
 import React, { FC, useRef } from "react";
 import EditorOutput from "./EditorOutput";
 import PostVoteClient from "./post-vote/PostVoteClient";
-
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/Form";
+import { Badge } from "./ui/Badge";
+import Image from "next/image";
 type PartialVote = Pick<Vote, "type">;
 
 interface PostProps {
@@ -16,6 +26,7 @@ interface PostProps {
   commentAmt: number;
   votesAmt: number;
   currentVote?: PartialVote;
+  url: string;
 }
 
 const Post: FC<PostProps> = ({
@@ -24,6 +35,7 @@ const Post: FC<PostProps> = ({
   commentAmt,
   votesAmt: votesAmt,
   currentVote,
+  url,
 }) => {
   const pRef = useRef<HTMLDivElement>(null);
   return (
@@ -51,18 +63,51 @@ const Post: FC<PostProps> = ({
             {formatTimeToNow(new Date(post.createdAt))}
           </div>
           <a href={`/c/${communityName}/post/${post.id}`}>
-            <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900">
+            <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
+              <div
+                className={`text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 ${
+                  post.sitename === "Twitch"
+                    ? "bg-purple-500"
+                    : post.sitename === "YouTube"
+                    ? "bg-red-500"
+                    : ""
+                }`}
+              >
+                {post.sitename === "Twitch" ? (
+                  <Image
+                    src="/twitch.png"
+                    alt="twitch"
+                    width={20}
+                    height={20}
+                  />
+                ) : post.sitename === "YouTube" ? (
+                  <Image
+                    src="/youtube.png" // replace with actual URL of Youtube image
+                    alt="youtube"
+                    width={20}
+                    height={20}
+                  />
+                ) : null}
+                {post.channel}
+              </div>
               {post.title}
             </h1>
+
+            {post.tag && (
+              <p className="mb-2">
+                <Badge variant="default">{post.tag.toUpperCase()}</Badge>
+              </p>
+            )}
           </a>
-          <div
-            className="relative text-sm max-h-40 overflow-clip w-full"
-            ref={pRef}
-          >
-            <EditorOutput content={post.content} />
-            {pRef.current?.clientHeight === 160 ? (
-              <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent" />
-            ) : null}
+          <div className="relative text-sm h-[500px] w-full" ref={pRef}>
+            <iframe
+              src={url}
+              height="100%"
+              width="100%"
+              frameBorder="0"
+              scrolling="no"
+              allowFullScreen={true}
+            ></iframe>
           </div>
         </div>
       </div>

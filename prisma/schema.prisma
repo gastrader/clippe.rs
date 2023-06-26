@@ -100,7 +100,11 @@ model Subscription {
 model Post {
   id          String    @id @default(cuid())
   title       String
-  content     Json?
+  url         String?
+  tag         String?
+  channel     String?
+  sitename    String?
+  embedurl    String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   communityId String

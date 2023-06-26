@@ -37,6 +37,7 @@ const PostFeed: FC<PostFeedProps> = ({
           page: pageParam,
           filter: filterType, // new, old, top...
           communityName: communityName,
+
         },
       });
       return data as ExtendedPost[];
@@ -81,6 +82,7 @@ const PostFeed: FC<PostFeedProps> = ({
           return (
             <li key={post.id} ref={ref}>
               <Post
+                url={post.embedurl}
                 key={post.id}
                 post={post}
                 commentAmt={post.comments.length}
@@ -93,6 +95,7 @@ const PostFeed: FC<PostFeedProps> = ({
         } else {
           return (
             <Post
+              url={post.embedurl}
               key={post.id}
               post={post}
               commentAmt={post.comments.length}

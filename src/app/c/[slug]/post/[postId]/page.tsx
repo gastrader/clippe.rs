@@ -13,6 +13,8 @@ import { Post, User, Vote } from "@prisma/client";
 import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import Image from "next/image";
+import { Badge } from "@/components/ui/Badge";
 
 interface CommunityPostPageProps {
   params: {
@@ -74,11 +76,43 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
                   new Date(post?.createdAt ?? cachedPost.createdAt)
                 )}
               </p>
-              <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">
+              <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
+                <div
+                  className={`text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 ${
+                    post?.sitename ?? cachedPost.sitename === "Twitch"
+                      ? "bg-purple-500"
+                      : post?.sitename ?? cachedPost.sitename === "YouTube"
+                      ? "bg-red-500"
+                      : ""
+                  }`}
+                >
+                  {post?.sitename ?? cachedPost.sitename === "Twitch" ? (
+                    <Image
+                      src="/twitch.png"
+                      alt="twitch"
+                      width={20}
+                      height={20}
+                    />
+                  ) : post?.sitename ?? cachedPost.sitename === "YouTube" ? (
+                    <Image
+                      src="/youtube.png" // replace with actual URL of Youtube image
+                      alt="youtube"
+                      width={20}
+                      height={20}
+                    />
+                  ) : null}
+                  {post?.channel ?? cachedPost.channel}
+                </div>
                 {post?.title ?? cachedPost.title}
               </h1>
-
-              <EditorOutput content={post?.content ?? cachedPost.content} />
+              {(post?.tag?.toUpperCase() ?? cachedPost.tag.toUpperCase()) && (
+                <p className="mb-2">
+                  <Badge variant="default">
+                    {post?.tag?.toUpperCase() ?? cachedPost.tag.toUpperCase()}
+                  </Badge>
+                </p>
+              )}
+              <EditorOutput content={post?.embedurl ?? cachedPost.embedurl} />
 
               <div className="">
                 <Suspense

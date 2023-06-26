@@ -75,6 +75,7 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
           return (
             <li key={post.id} ref={ref}>
               <Post
+                url={post.embedurl}
                 key={post.id}
                 post={post}
                 commentAmt={post.comments.length}
@@ -87,6 +88,7 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
         } else {
           return (
             <Post
+              url={post.embedurl}
               key={post.id}
               post={post}
               commentAmt={post.comments.length}
