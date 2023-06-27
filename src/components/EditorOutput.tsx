@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import React, { FC } from "react";
 import Image from "next/image";
-import { Link } from "lucide-react";
+import { Link, Link2 } from "lucide-react";
 
 interface EditorOutputProps {
   content: any;
@@ -19,7 +19,7 @@ const EditorOutput: FC<EditorOutputProps> = ({ content, sitename }) => {
           rel="noopener noreferrer"
           className="underline flex items-center text-sm text-blue-800"
         >
-          {content} <Link className="ml-1 h-4 w-4" />
+          {content} <Link2 className="ml-1 h-4 w-4" />
         </a>
       </div>
     );
