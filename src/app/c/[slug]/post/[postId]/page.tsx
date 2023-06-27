@@ -15,6 +15,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/Badge";
+import ShareButton from "@/components/ShareButton";
 
 interface CommunityPostPageProps {
   params: {
@@ -40,6 +41,11 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
       include: {
         votes: true,
         author: true,
+        community: {
+          select:{
+            name: true
+          }
+        }
       },
     });
   }
@@ -63,6 +69,7 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
                     },
                     include: {
                       votes: true,
+                      community: true,
                     },
                   });
                 }}
@@ -71,51 +78,68 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
 
             <div className="sm:w-0 w-full flex-1 bg-white p-4 rounded-sm">
               <div>
-              <p className="max-h-40 mt-1 truncate text-xs text-gray-500">
-                Posted by u/{post?.author.username ?? cachedPost.authorUsername}{" "}
-                {formatTimeToNow(
-                  new Date(post?.createdAt ?? cachedPost.createdAt)
-                )}
-              </p>
-              <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
-                <div
-                  className={`text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 ${
-                    post?.sitename ?? cachedPost.sitename === "Twitch"
-                      ? "bg-purple-500"
-                      : post?.sitename ?? cachedPost.sitename === "YouTube"
-                      ? "bg-red-500"
-                      : ""
-                  }`}
-                >
-                  {post?.sitename ?? cachedPost.sitename === "Twitch" ? (
-                    <Image
-                      src="/twitch.png"
-                      alt="twitch"
-                      width={20}
-                      height={20}
-                    />
-                  ) : post?.sitename ?? cachedPost.sitename === "YouTube" ? (
-                    <Image
-                      src="/youtube.png" // replace with actual URL of Youtube image
-                      alt="youtube"
-                      width={20}
-                      height={20}
-                    />
-                  ) : null}
-                  {post?.channel ?? cachedPost.channel}
+                <div className="max-h-40 mt-1 truncate text-xs text-gray-500 flex justify-between">
+                  <span>
+                    Posted by u/
+                    {post?.author.username ?? cachedPost.authorUsername}{" "}
+                    {formatTimeToNow(
+                      new Date(post?.createdAt ?? cachedPost.createdAt)
+                    )}
+                  
+                  </span>
+                  {/* @ts-ignore IDK WHY THIS IS ERRORING  */}
+                  <ShareButton community_name={post?.community.name ?? ""} post_id={post?.id}/>
                 </div>
-                {post?.title ?? cachedPost.title}
-              </h1>
-              {(post?.tag?.toUpperCase() ?? cachedPost.tag.toUpperCase()) && (
-                <p className="mb-2">
-                  <Badge variant="default">
-                    {post?.tag?.toUpperCase() ?? cachedPost.tag.toUpperCase()}
-                  </Badge>
-                </p>
-              )}
-              <EditorOutput content={post?.embedurl ?? cachedPost.embedurl} sitename={post?.sitename ?? cachedPost.sitename} />
+                <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
+                  <div
+                    className={`shadow border border-gray-300 text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 text-white ${
+                      post?.sitename === "Twitch"
+                        ? "bg-purple-500"
+                        : post?.sitename === "YouTube"
+                        ? "bg-red-500"
+                        : post?.sitename === "Kick"
+                        ? "bg-green-400"
+                        : ""
+                    }`}
+                  >
+                    {post?.sitename === "Twitch" ? (
+                      <Image
+                        src="/twitch.png"
+                        alt="twitch"
+                        width={20}
+                        height={20}
+                      />
+                    ) : post?.sitename === "YouTube" ? (
+                      <Image
+                        src="/youtube.png"
+                        alt="youtube"
+                        width={20}
+                        height={20}
+                      />
+                    ) : post?.sitename === "Kick" ? (
+                      <Image
+                        src="/kick.png"
+                        alt="kick"
+                        width={15}
+                        height={15}
+                      />
+                    ) : null}
+                    {post?.channel}
+                  </div>
+                  {post?.title}
+                </h1>
+                {(post?.tag?.toUpperCase() ?? cachedPost.tag.toUpperCase()) && (
+                  <p className="mb-2">
+                    <Badge variant="default">
+                      {post?.tag?.toUpperCase() ?? cachedPost.tag.toUpperCase()}
+                    </Badge>
+                  </p>
+                )}
+                <EditorOutput
+                  content={post?.embedurl ?? cachedPost.embedurl}
+                  sitename={post?.sitename ?? cachedPost.sitename}
+                />
 
-              
                 <Suspense
                   fallback={
                     <Loader2 className="h-5 w-5 animate-spin text-zinc-500" />

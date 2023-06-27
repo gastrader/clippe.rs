@@ -34,7 +34,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const urlValidator = (url: string) => {
   const regex =
-    /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be|clips\.twitch\.tv|kick\.com)\/.+$/;
+    /^(https?:\/\/)?((www\.)?(youtube\.com\/clip|youtube\.com|youtu\.?be|clips\.twitch\.tv|kick\.com))\/.+$/;
   return regex.test(url);
 };
 
@@ -50,7 +50,7 @@ const profileFormSchema = z.object({
 
   url: z
     .string()
-    .url({ message: "Please enter a valid URL." })
+    .url({ message: "Please enter a valid Twitch, YouTube or Kick clip URL." })
     .refine(urlValidator, {
       message: "URL must be a valid YouTube or Twitch Link.",
     }),
@@ -138,6 +138,7 @@ export const Editor2: React.FC<Editor2Props> = ({ communityId }) => {
       });
     },
   });
+  const clipUrl = form.watch("url");
 
   return (
     <Form {...form}>
@@ -201,7 +202,12 @@ export const Editor2: React.FC<Editor2Props> = ({ communityId }) => {
             </FormItem>
           )}
         />
-        <Button type="submit">Post</Button>
+        <Button
+          type="submit"
+          disabled={!clipUrl || clipUrl.trim().length === 0}
+        >
+          Post
+        </Button>
       </form>
     </Form>
   );

@@ -158,7 +158,7 @@ const Post: FC<PostProps> = ({
         <button
           className="flex gap-2 hover:bg-gray-200 p-2 rounded-lg"
           onClick={() =>
-            handleCopy(`localhost:3000/c/${communityName}/post/${post.id}`)
+            handleCopy(`clippe.rs/c/${communityName}/post/${post.id}`)
           }
         >
           <Link className="h-4 w-4" />

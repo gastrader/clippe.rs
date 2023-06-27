@@ -50,7 +50,6 @@ export async function POST(req: Request) {
       })
     );
 
-    console.log("THE FEED NAME SHOULD BE: ", feed.name);
     return new Response(feed.id);
   } catch (error) {
     if (error instanceof z.ZodError) {
