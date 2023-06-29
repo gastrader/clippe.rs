@@ -42,10 +42,10 @@ const frameworks = [
   },
 ];
 
-export function Combobox({ onChange, value }) {
+export function Combobox({ onChange, value }: any) {
   const [open, setOpen] = useState(false);
 
-  const handleSelect = (currentValue) => {
+  const handleSelect = (currentValue: string) => {
     onChange(currentValue === value ? "" : currentValue);
     setOpen(false);
   };
