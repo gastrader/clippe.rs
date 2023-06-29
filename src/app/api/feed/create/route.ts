@@ -26,29 +26,30 @@ export async function POST(req: Request) {
       return new Response("Feed name already exists", { status: 409 });
     }
 
-    const communityIds = communities.map(
-      (community: { id: any }) => community.id
-    );
+    const communityIds = communities.map((community) => ({ id: community.id }));
 
     // Create the new feed
     const feed = await db.feed.create({
       data: {
         name: feedName,
         userId: session.user.id,
+        communities: {
+          connect: communityIds,
+        },
       },
     });
 
     // Connect the communities to the new feed using the intermediate table
-    await Promise.all(
-      communityIds.map(async (communityId: string) => {
-        await db.communityFeed.create({
-          data: {
-            communityId,
-            feedId: feed.id,
-          },
-        });
-      })
-    );
+    // await Promise.all(
+    //   communityIds.map(async (communityId: string) => {
+    //     await db.communityFeed.create({
+    //       data: {
+    //         communityId,
+    //         feedId: feed.id,
+    //       },
+    //     });
+    //   })
+    // );
 
     return new Response(feed.id);
   } catch (error) {
