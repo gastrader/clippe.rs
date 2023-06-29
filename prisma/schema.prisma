@@ -84,7 +84,7 @@ model Community {
   subscribers   Subscription[]
   moderators    CommunityModerator[]
   communityFeed CommunityFeed[]
-  Feed          Feed?                @relation(fields: [feedId], references: [id])
+  Feed          Feed?                 @relation(fields: [feedId], references: [id])
   feedId        String?
 
   @@index([name])
