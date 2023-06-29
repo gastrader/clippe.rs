@@ -39,7 +39,7 @@ const CustomFeed = async () => {
     take: INFINITE_SCROLLING_PAGINATION_RESULTS,
   });
 
-  return <PostFeed initialPosts={posts} />;
+  return <PostFeed initialPosts={posts} filterType="" />;
 };
 
 export default CustomFeed;
