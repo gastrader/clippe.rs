@@ -65,12 +65,15 @@ export async function PATCH(req: Request){
             }, 0)
             if(votesAmt > CACHE_AFTER_UPVOTES){
                 const cachePayload: CachedPost = {
-                    authorUsername: post.author.username ?? '',
-                    content: JSON.stringify(post.content),
-                    id: post.id,
-                    title: post.title,
-                    createdAt: post.createdAt
-                }
+                  authorUsername: post.author.username ?? "",
+                  embedurl: JSON.stringify(post.embedurl),
+                  id: post.id,
+                  title: post.title,
+                  createdAt: post.createdAt,
+                  tag: post.tag || "",
+                  channel: post.channel || "",
+                  sitename: post.sitename || "",
+                };
                 await redis.hset(`post:${postId}`, cachePayload)
             }
             return new Response('OK')
@@ -92,10 +95,13 @@ export async function PATCH(req: Request){
             if(votesAmt > CACHE_AFTER_UPVOTES){
                 const cachePayload: CachedPost = {
                     authorUsername: post.author.username ?? '',
-                    content: JSON.stringify(post.content),
+                    embedurl: JSON.stringify(post.embedurl),
                     id: post.id,
                     title: post.title,
-                    createdAt: post.createdAt
+                    createdAt: post.createdAt,
+                    tag: post.tag || "",
+                    channel: post.channel || "",
+                    sitename: post.sitename || ""
                 }
                 await redis.hset(`post:${postId}`, cachePayload)
             }
