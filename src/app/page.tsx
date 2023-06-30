@@ -1,4 +1,3 @@
-
 import CustomFeed from "@/components/CustomFeed";
 import UserFeed from "@/components/UserFeed";
 import TopCommunities from "@/components/TopCommunities";
@@ -10,27 +9,22 @@ import Link from "next/link";
 import NotificationsPopoverServer from "../components/notifications/NotificationsPopoverServer";
 
 import { FilterModeSelectorF } from "@/components/FilterModeSelectorF";
-import {FeedSelector} from "@/components/FeedSelector";
+import { FeedSelector } from "@/components/FeedSelector";
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
 export default async function Home() {
   const session = await getAuthSession();
-  
+
   return (
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">Your feed</h1>
       <div className="space-x-2 flex flex-row">
         <FilterModeSelectorF />
-        
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
-        <UserFeed
-          filterType="new"
-          initialPosts={[]}
-          
-        />
+        <UserFeed filterType="new" initialPosts={[]} />
 
         {/* COMMUNITY INFO AND NEW COMPONENT*/}
         <div className="order-first md:order-last">

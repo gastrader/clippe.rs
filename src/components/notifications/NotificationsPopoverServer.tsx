@@ -14,7 +14,7 @@ const NotificationsPopoverServer = async () => {
     -1
   )) as { postId: string; type: string }[];
 
-  return <NotificationsPopover notifications={notifications} />;
+  return <NotificationsPopover initialNotifications={notifications} />;
 };
 
 export default NotificationsPopoverServer;
