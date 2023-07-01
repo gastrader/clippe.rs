@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { CommentValidator } from "@/lib/validators/comment";
 import { z } from "zod";
 import { redis } from "../../../../../lib/redis";
+import { Notification } from "../../../../../types/notifications";
+import { randomUUID } from "crypto";
 
 export async function PATCH(req: Request) {
   try {
@@ -16,7 +18,7 @@ export async function PATCH(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    await db.comment.create({
+    const replyComment = await db.comment.create({
       data: {
         text,
         postId,
@@ -34,14 +36,35 @@ export async function PATCH(req: Request) {
           authorId: true,
         },
       });
+
       if (parentCommentAuthor) {
-        await redis.lpush(
-          `notifications:${[parentCommentAuthor.authorId]}`,
-          JSON.stringify({
-            type: "comment_reply",
-            postId,
-          })
-        );
+        const replyPostCommunitySelect = await db.post.findUnique({
+          where: {
+            id: replyComment.postId,
+          },
+          select: {
+            community: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        });
+        if (replyPostCommunitySelect) {
+          const commentReplyNotification: Notification = {
+            type: "COMMENT_REPLY",
+            id: randomUUID(),
+            payload: {
+              commentReplyId: replyComment.id,
+              communityName: replyPostCommunitySelect.community.name,
+              postId,
+            },
+          };
+          await redis.lpush(
+            `notifications:${[parentCommentAuthor.authorId]}`,
+            JSON.stringify(commentReplyNotification)
+          );
+        }
       }
     }
 

@@ -11,9 +11,11 @@ import { Button } from "../ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import axios from "axios";
+import { Notification } from "../../types/notifications";
+import Link from "next/link";
 
 type NotificationsPopoverProps = {
-  initialNotifications: Array<{ type: string; postId: string }>;
+  initialNotifications: Notification[];
 };
 
 export const NotificationsPopover = ({
@@ -59,10 +61,16 @@ export const NotificationsPopover = ({
         )}
         <div className="flex flex-col items-center justify-start gap-2 p-2">
           {notifs.map((notif) => (
-            <DropdownMenuItem asChild key={notif.postId}>
-              <div className="flex flex-col space-y-1 leading-none">
-                {notif.type}
-              </div>
+            <DropdownMenuItem asChild key={notif.id}>
+              {notif.type === "COMMENT_REPLY" && (
+                <Link
+                  href={`/c/${notif.payload.communityName}/post/${notif.payload.postId}#${notif.payload.commentReplyId}`}
+                >
+                  <div className="flex flex-col space-y-1 leading-none">
+                    New reply to your comment in {notif.payload.communityName}
+                  </div>
+                </Link>
+              )}
             </DropdownMenuItem>
           ))}
         </div>

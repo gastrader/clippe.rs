@@ -22,6 +22,8 @@ interface PostProps {
   url: string;
 }
 
+const IFRAME_PARENT = "&parent=localhost&parent=clippe.rs";
+
 const Post: FC<PostProps> = ({
   communityName,
   post,
@@ -132,14 +134,15 @@ const Post: FC<PostProps> = ({
             ) : (
               // {loading && <Skeleton className="w-full h-[500px] rounded-xl " />}
               <iframe
-                src={url}
+                src={`${url}${IFRAME_PARENT}`}
                 height="500"
                 width="100%"
                 frameBorder="0"
                 scrolling="no"
                 allowFullScreen={true}
                 onLoad={() => setLoading(false)}
-              ></iframe>
+                sandbox="allow-forms allow-orientation-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+              />
             )}
           </div>
         </div>
@@ -168,8 +171,5 @@ const Post: FC<PostProps> = ({
     </div>
   );
 };
-
-
-
 
 export default Post;

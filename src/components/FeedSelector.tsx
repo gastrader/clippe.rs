@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "./ui/Tabs";
-import { Rocket, Sparkles } from "lucide-react";
+import { ChevronsUpDown, Rocket, Sparkles } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -25,9 +25,10 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
-} from "@/components/ui/Navigation-Menu"
+} from "@/components/ui/Navigation-Menu";
 import { cn } from "@/lib/utils";
-
+import { Popover, PopoverTrigger } from "./ui/Popover";
+import { Button } from "./ui/Button";
 
 export const FeedSelector = () => {
   const { slug, filter = "new" } = useParams();
@@ -44,25 +45,49 @@ export const FeedSelector = () => {
   });
 
   return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          // aria-expanded={open}
+          className={cn("w-[200px] justify-between")}
+        >
+          Default feed
+          <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+    </Popover>
+  );
+
+  return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="w-[180px]">Your Feeds</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="w-[180px]">
+            Your Feeds
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid w-[300px] gap-3 p-4 md:grid-cols-2 ">
-              {feeds?.map((feedName: string, index:number) => (
-                <ListItem
-                  key={index}
-                  title={feedName}
-                  href={`/feed/${feedName}`}
-                >
-                </ListItem>
-              ))}
-            </ul>
+            <div className="grid w-[300px] gap-3 p-4">
+              {feeds.length > 0 ? (
+                <ul>
+                  {feeds?.map((feedName: string, index: number) => (
+                    <ListItem
+                      key={index}
+                      title={feedName}
+                      href={`/feed/${feedName}`}
+                    ></ListItem>
+                  ))}
+                </ul>
+              ) : (
+                <span>You don't have any feeds yet</span>
+              )}
+            </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
-    </NavigationMenu>)
+    </NavigationMenu>
+  );
 };
 
 export default FeedSelector;
@@ -89,6 +114,6 @@ const ListItem = forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = "ListItem";

@@ -70,7 +70,7 @@ const PostComment: FC<PostCommentProps> = ({
 
   return (
     <div ref={commentRef} className="flex flex-col">
-      <div className="flex items-center">
+      <div className="flex items-center" id={comment.id}>
         <UserAvatar
           user={{
             name: comment.author.name || null,
