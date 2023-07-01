@@ -25,28 +25,28 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
   });
   const { data: session } = useSession();
 
-  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching } = useInfiniteQuery(
-    ["infinite-query", filterType],
-    async ({ pageParam = 1 }) => {
-      const { data } = await axios.get("/api/feed", {
-        params: {
-          limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
-          page: pageParam,
-          filter: filterType, // new, old, top...
-          
-        },
-      });
-      return data as ExtendedPost[];
-    },
-    {
-      getNextPageParam: (_, pages) => {
-        return pages.length + 1;
+  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching } =
+    useInfiniteQuery(
+      ["infinite-query", filterType],
+      async ({ pageParam = 1 }) => {
+        const { data } = await axios.get("/api/feed", {
+          params: {
+            limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
+            page: pageParam,
+            filter: filterType, // new, old, top...
+          },
+        });
+        return data as ExtendedPost[];
       },
-      initialData: { pages: [initialPosts], pageParams: [1] },
-      staleTime: 0,
-      cacheTime: 0,
-    }
-  );
+      {
+        getNextPageParam: (_, pages) => {
+          return pages.length + 1;
+        },
+        initialData: { pages: [initialPosts], pageParams: [1] },
+        staleTime: 0,
+        cacheTime: 0,
+      }
+    );
 
   useEffect(() => {
     if (entry?.isIntersecting) {
@@ -54,15 +54,10 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
     }
   }, [entry, fetchNextPage, filterType]);
 
-
-
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
 
   return (
     <div className="flex flex-col col-span-2 space-y-6">
-      <div className="absolute ">
-        <FeedSelector />
-      </div>
       <ul className="flex flex-col col-span-2 space-y-6 pt-10">
         {isLoading
           ? [1, 2].map((n) => (

@@ -1,15 +1,12 @@
-import CustomFeed from "@/components/CustomFeed";
 import UserFeed from "@/components/UserFeed";
 import TopCommunities from "@/components/TopCommunities";
 import { buttonVariants } from "@/components/ui/Button";
-import PostFeed from "@/components/PostFeed";
 import { getAuthSession } from "@/lib/auth";
-import { HomeIcon, Rocket, Sparkles, TrendingUp } from "lucide-react";
+import { HomeIcon } from "lucide-react";
 import Link from "next/link";
-import NotificationsPopoverServer from "../components/notifications/NotificationsPopoverServer";
 
-import { FilterModeSelectorF } from "@/components/FilterModeSelectorF";
 import { FeedSelector } from "@/components/FeedSelector";
+import { FilterModeSelector } from "../components/FilterModeSelector";
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
@@ -21,7 +18,8 @@ export default async function Home() {
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">Your feed</h1>
       <div className="space-x-2 flex flex-row">
-        <FilterModeSelectorF />
+        <FilterModeSelector mode="feed" />
+        <FeedSelector />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
         <UserFeed filterType="new" initialPosts={[]} />

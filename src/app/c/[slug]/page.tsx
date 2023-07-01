@@ -1,12 +1,12 @@
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import React, { FC } from "react";
+import React from "react";
 import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
 import PostFeed from "@/components/PostFeed";
 import AboutCommunity from "@/components/AboutCommunity";
-import { FilterModeSelectorC } from "@/components/FilterModeSelectorC";
+import { FilterModeSelector } from "../../../components/FilterModeSelector";
 
 interface PageProps {
   params: {
@@ -40,7 +40,7 @@ const page = async ({ params }: PageProps) => {
       <h1 className="font-bold text-3xl md:text-4xl h-14">
         c/{community.name}
       </h1>
-      <FilterModeSelectorC />
+      <FilterModeSelector mode="community" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
         <div className="md:col-span-2 space-y-6">
           <MiniCreatePost session={session} />
@@ -54,7 +54,7 @@ const page = async ({ params }: PageProps) => {
         <div className="order-first md:order-last">
           <div className="overflow-hidden h-fit rounded-lg border border-gray-200">
             {/* @ts-ignore server component */}
-            <AboutCommunity params={slug}/>
+            <AboutCommunity params={slug} />
           </div>
         </div>
       </div>

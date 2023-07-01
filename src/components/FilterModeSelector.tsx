@@ -1,29 +1,37 @@
 "use client";
 
-import Link from "next/link";
-import { buttonVariants } from "./ui/Button";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { Tabs, TabsList, TabsTrigger } from "./ui/Tabs";
+import { Rocket, Sparkles } from "lucide-react";
 
-export const FilterModeSelector = () => {
+export const FilterModeSelector = ({
+  mode,
+}: {
+  mode: "community" | "feed";
+}) => {
   const { slug, filter = "new" } = useParams();
-  
+  const router = useRouter();
+
+  const handleTabClick = (filter: string) => {
+    if (mode === "community" && slug) {
+      router.push(`/c/${slug}/${filter}`);
+    } else if (mode === "feed") {
+      router.push(`/feed/${filter}`);
+    }
+  };
 
   return (
-    <div className="flex gap-2">
-      <Link
-        className={buttonVariants({ variant: "subtle" })}
-        href={`/c/${slug}/new`}
-      >
-        new
-        {filter === "new" && <span>(you are here)</span>}
-      </Link>
-      <Link
-        className={buttonVariants({ variant: "subtle" })}
-        href={`/c/${slug}/old`}
-      >
-        old
-        {filter === "old" && <span>(you are here)</span>}
-      </Link>
-    </div>
+    <Tabs defaultValue={filter} className="w-[200px]">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger onClick={() => handleTabClick("new")} value="new">
+          <Sparkles className="w-4 h-4 mr-2" />
+          New
+        </TabsTrigger>
+        <TabsTrigger onClick={() => handleTabClick("old")} value="old">
+          <Rocket className="w-4 h-4 mr-2" />
+          Old
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
   );
 };

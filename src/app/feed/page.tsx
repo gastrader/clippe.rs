@@ -1,11 +1,11 @@
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import React, { FC } from "react";
+import React from "react";
 import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
 import UserFeed from "@/components/UserFeed";
-import { FilterModeSelectorF } from "@/components/FilterModeSelectorF";
+import { FilterModeSelector } from "../../components/FilterModeSelector";
 
 interface PageProps {
   params: {
@@ -37,10 +37,8 @@ const page = async ({ params }: PageProps) => {
   if (!community) return notFound();
   return (
     <div className="space-y-6">
-      <h1 className="font-bold text-3xl md:text-4xl h-14">
-        Feed
-      </h1>
-      <FilterModeSelectorF />
+      <h1 className="font-bold text-3xl md:text-4xl h-14">Feed</h1>
+      <FilterModeSelector mode="feed" />
       <MiniCreatePost session={session} />
       <UserFeed
         // initialPosts={community.posts}
