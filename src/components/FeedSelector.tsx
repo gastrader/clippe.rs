@@ -12,15 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/DropdownMenu";
+import Link from "next/link";
+import { PlusCircle } from "lucide-react";
 
 export const FeedSelector = () => {
-  const { slug, filter = "new" } = useParams();
-  const router = useRouter();
-
-  const handleTabClick = (feedId: string) => {
-    router.push(`/feed/${feedId}`);
-  };
-
   const { data: feeds = [], isLoading } = useQuery<Feed[]>({
     queryKey: ["feeds"],
     queryFn: async () => {
@@ -38,12 +33,20 @@ export const FeedSelector = () => {
         {feeds.length > 0 ? (
           <>
             {feeds.map((feed) => (
-              <DropdownMenuItem key={feed.id}>{feed.name}</DropdownMenuItem>
+              <DropdownMenuItem key={feed.id}>
+                <Link href={`/feed/${feed.id}`}>{feed.name}</Link>
+              </DropdownMenuItem>
             ))}
           </>
         ) : (
           <span>You don't have any feeds yet</span>
         )}
+        <DropdownMenuSeparator />
+        <Link href="/feed/create">
+          <div className="flex gap-2">
+            <PlusCircle /> Create new feed
+          </div>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );
