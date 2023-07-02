@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import React from "react";
 import { notFound } from "next/navigation";
 import TopCommunities from "@/components/TopCommunities";
-import UserFeed from "@/components/UserFeed";
+import { UserFeed } from "@/components/UserFeed";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/Button";
 import { HomeIcon } from "lucide-react";

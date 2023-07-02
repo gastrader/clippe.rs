@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import React from "react";
 import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
-import UserFeed from "@/components/UserFeed";
+import { UserFeed } from "@/components/UserFeed";
 import { ViewModeSelector } from "../../components/ViewModeSelector";
 
 interface PageProps {
