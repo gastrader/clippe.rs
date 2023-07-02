@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { type Feed } from "@prisma/client";
@@ -14,8 +13,11 @@ import {
 } from "./ui/DropdownMenu";
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
+import { useState } from "react";
+import { Button } from "./ui/Button";
 
 export const FeedSelector = () => {
+  const [open, setOpen] = useState(false);
   const { data: feeds = [], isLoading } = useQuery<Feed[]>({
     queryKey: ["feeds"],
     queryFn: async () => {
@@ -25,28 +27,37 @@ export const FeedSelector = () => {
   });
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>Choose a feed</DropdownMenuTrigger>
-      <DropdownMenuContent>
+    <DropdownMenu open={open}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="subtle" onClick={() => setOpen(true)}>
+          Select feed
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent onInteractOutside={() => setOpen(false)}>
         <DropdownMenuLabel>Available feeds</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {feeds.length > 0 ? (
           <>
             {feeds.map((feed) => (
-              <DropdownMenuItem key={feed.id}>
-                <Link href={`/feed/${feed.id}`}>{feed.name}</Link>
-              </DropdownMenuItem>
+              <Link href={`/feed/${feed.id}`} passHref key={feed.id}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {feed.name}
+                </DropdownMenuItem>
+              </Link>
             ))}
           </>
         ) : (
-          <span>You don't have any feeds yet</span>
+          <span>You don't have any feeds yet 👻</span>
         )}
         <DropdownMenuSeparator />
-        <Link href="/feed/create">
-          <div className="flex gap-2">
-            <PlusCircle /> Create new feed
-          </div>
-        </Link>
+        <DropdownMenuItem>
+          <Link href="/feed/create" onClick={() => setOpen(false)}>
+            <div className="flex gap-2 justify-center items-center">
+              <PlusCircle size={16} />
+              <span>New feed</span>
+            </div>
+          </Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
