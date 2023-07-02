@@ -8,7 +8,7 @@ import UserFeed from "@/components/UserFeed";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/Button";
 import { HomeIcon } from "lucide-react";
-import { FilterModeSelector } from "../../../components/FilterModeSelector";
+import { ViewModeSelector } from "../../../components/ViewModeSelector";
 
 interface PageProps {
   params: {
@@ -43,7 +43,7 @@ const page = async ({ params }: PageProps) => {
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">Your feed</h1>
       <div className="space-x-2">
-        <FilterModeSelector mode="feed" />
+        <ViewModeSelector mode="feed" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
         <UserFeed filterType={filter} initialPosts={[]} />

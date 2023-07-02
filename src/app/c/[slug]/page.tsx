@@ -1,4 +1,3 @@
-import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import React from "react";
@@ -6,7 +5,8 @@ import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
 import PostFeed from "@/components/PostFeed";
 import AboutCommunity from "@/components/AboutCommunity";
-import { FilterModeSelector } from "../../../components/FilterModeSelector";
+import { ViewModeSelector } from "../../../components/ViewModeSelector";
+import { CommunityLayout } from "../../../components/layouts/CommunityLayout";
 
 interface PageProps {
   params: {
@@ -20,6 +20,7 @@ const page = async ({ params }: PageProps) => {
   const community = await db.community.findFirst({
     where: { name: slug },
     include: {
+      subscribers: true,
       posts: {
         include: {
           author: true,
@@ -27,20 +28,40 @@ const page = async ({ params }: PageProps) => {
           comments: true,
           community: true,
         },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: INFINITE_SCROLLING_PAGINATION_RESULTS,
       },
     },
   });
   if (!community) return notFound();
+
+  const subscription = !session?.user
+    ? undefined
+    : await db.subscription.findFirst({
+        where: {
+          community: {
+            id: community.id,
+          },
+          user: {
+            id: session.user.id,
+          },
+        },
+      });
+
+  return (
+    <CommunityLayout
+      session={session}
+      community={community}
+      subscribed={!!subscription}
+    >
+      <PostFeed view="new" initialPosts={[]} communityName={community.name} />
+    </CommunityLayout>
+  );
+
   return (
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">
         c/{community.name}
       </h1>
-      <FilterModeSelector mode="community" />
+      <ViewModeSelector mode="community" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
         <div className="md:col-span-2 space-y-6">
           <MiniCreatePost session={session} />

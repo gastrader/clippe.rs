@@ -5,7 +5,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import MiniCreatePost from "@/components/MiniCreatePost";
 import UserFeed from "@/components/UserFeed";
-import { FilterModeSelector } from "../../components/FilterModeSelector";
+import { ViewModeSelector } from "../../components/ViewModeSelector";
 
 interface PageProps {
   params: {
@@ -38,7 +38,7 @@ const page = async ({ params }: PageProps) => {
   return (
     <div className="space-y-6">
       <h1 className="font-bold text-3xl md:text-4xl h-14">Feed</h1>
-      <FilterModeSelector mode="feed" />
+      <ViewModeSelector mode="feed" />
       <MiniCreatePost session={session} />
       <UserFeed
         // initialPosts={community.posts}

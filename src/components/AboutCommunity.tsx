@@ -1,54 +1,24 @@
+"use client";
+
 import Link from "next/link";
 import SubscribeLeaveToggle from "./SubscribeLeaveToggle";
-import { ReactNode } from "react";
-import { getAuthSession } from "@/lib/auth";
 import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
 import { buttonVariants } from "./ui/Button";
 import { format } from "date-fns";
+import { Session } from "next-auth";
+import { CommunityWithSubscribers } from "../types";
 
-interface Community {
-  subscribers: { userId: string; communityId: string }[];
-  createdAt: Date;
-  name: string;
-  creatorId: string;
-  id: string;
-}
+type AboutCommunityProps = {
+  community: CommunityWithSubscribers;
+  subscribed: boolean;
+  session: Session | null;
+};
 
-interface AboutCommunityProps {
-  children: ReactNode;
-  params: { slug: string };
-}
-
-const AboutCommunity = async ({ children, params }: AboutCommunityProps) => {
-  const session = await getAuthSession();
-
-  const community = await db.community.findFirst({
-    where: { name: params.slug },
-    select: {
-      subscribers: true,
-      createdAt: true,
-      name: true,
-      creatorId: true,
-      id: true,
-    },
-  });
-  // console.log("DA COMMUNITY IS: ", community)
-  const subscription = !session?.user
-    ? undefined
-    : await db.subscription.findFirst({
-        where: {
-          community: {
-            name: params.slug,
-          },
-          user: {
-            id: session.user.id,
-          },
-        },
-      });
-
-  const isSubscribed = !!subscription;
-
+const AboutCommunity = ({
+  community,
+  subscribed,
+  session,
+}: AboutCommunityProps) => {
   if (!community) return notFound();
 
   return (
@@ -79,7 +49,7 @@ const AboutCommunity = async ({ children, params }: AboutCommunityProps) => {
 
         {community.creatorId !== session?.user?.id ? (
           <SubscribeLeaveToggle
-            isSubscribed={isSubscribed}
+            isSubscribed={subscribed}
             communityId={community.id}
             communityName={community.name}
           />
@@ -89,7 +59,7 @@ const AboutCommunity = async ({ children, params }: AboutCommunityProps) => {
             variant: "outline",
             className: "w-full mb-6",
           })}
-          href={`c/${params.slug}/submit`}
+          href={`c/${community.name}/submit`}
         >
           Create Post
         </Link>

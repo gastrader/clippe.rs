@@ -2,14 +2,16 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "./ui/Tabs";
-import { Rocket, Sparkles } from "lucide-react";
+import { ArrowUp10, Sparkles } from "lucide-react";
 
-export const FilterModeSelector = ({
-  mode,
+export const ViewModeSelector = ({
+  mode = "default",
+  activeView = "new",
 }: {
-  mode: "community" | "feed";
+  mode?: "community" | "feed" | "default";
+  activeView?: "old" | "new";
 }) => {
-  const { slug, filter = "new" } = useParams();
+  const { slug } = useParams();
   const router = useRouter();
 
   const handleTabClick = (filter: string) => {
@@ -17,18 +19,20 @@ export const FilterModeSelector = ({
       router.push(`/c/${slug}/${filter}`);
     } else if (mode === "feed") {
       router.push(`/feed/${filter}`);
+    } else {
+      router.push(`/${filter}`);
     }
   };
 
   return (
-    <Tabs defaultValue={filter} className="w-[200px]">
+    <Tabs className="w-[200px]" value={activeView}>
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger onClick={() => handleTabClick("new")} value="new">
           <Sparkles className="w-4 h-4 mr-2" />
           New
         </TabsTrigger>
         <TabsTrigger onClick={() => handleTabClick("old")} value="old">
-          <Rocket className="w-4 h-4 mr-2" />
+          <ArrowUp10 className="w-4 h-4 mr-2" />
           Old
         </TabsTrigger>
       </TabsList>

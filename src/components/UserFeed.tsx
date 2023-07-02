@@ -6,18 +6,17 @@ import { useIntersection } from "@mantine/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
-import { FC, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Post from "./Post";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "./ui/Skeleton";
-import FeedSelector from "./FeedSelector";
+import { ViewType } from "../types";
 
-interface UserFeedProps {
-  initialPosts: ExtendedPost[];
-  filterType: string;
-}
+type UserFeedProps = {
+  view: ViewType;
+};
 
-const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
+export const UserFeed = ({ view = "new" }: UserFeedProps) => {
   const lastPostRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
@@ -26,14 +25,14 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
   const { data: session } = useSession();
 
   const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching } =
-    useInfiniteQuery(
-      ["infinite-query", filterType],
+    useInfiniteQuery<ExtendedPost[]>(
+      ["infinite-query", view],
       async ({ pageParam = 1 }) => {
         const { data } = await axios.get("/api/feed", {
           params: {
             limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
             page: pageParam,
-            filter: filterType, // new, old, top...
+            filter: view, // new, old, top...
           },
         });
         return data as ExtendedPost[];
@@ -42,7 +41,7 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
         getNextPageParam: (_, pages) => {
           return pages.length + 1;
         },
-        initialData: { pages: [initialPosts], pageParams: [1] },
+        initialData: { pages: [], pageParams: [1] },
         staleTime: 0,
         cacheTime: 0,
       }
@@ -52,13 +51,13 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
     if (entry?.isIntersecting) {
       fetchNextPage(); // Load more posts when the last post comes into view
     }
-  }, [entry, fetchNextPage, filterType]);
+  }, [entry, fetchNextPage, view]);
 
-  const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
+  const posts = data?.pages.flatMap((page) => page) || [];
 
   return (
     <div className="flex flex-col col-span-2 space-y-6">
-      <ul className="flex flex-col col-span-2 space-y-6 pt-10">
+      <ul className="flex flex-col col-span-2 space-y-6">
         {isLoading
           ? [1, 2].map((n) => (
               <Skeleton className="w-full h-[600px] rounded-xl" key={n} />
@@ -117,5 +116,3 @@ const UserFeed: FC<UserFeedProps> = ({ initialPosts, filterType }) => {
     </div>
   );
 };
-
-export default UserFeed;

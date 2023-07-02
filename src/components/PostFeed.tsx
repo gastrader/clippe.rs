@@ -10,35 +10,31 @@ import { FC, useEffect, useRef } from "react";
 import Post from "./Post";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "./ui/Skeleton";
+import { ViewType } from "../types";
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
   communityName?: string;
-  filterType: string;
+  view: ViewType;
 }
 
-const PostFeed: FC<PostFeedProps> = ({
-  initialPosts,
-  communityName,
-  filterType,
-}) => {
+const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName, view }) => {
   const lastPostRef = useRef<HTMLElement>(null);
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
     threshold: 1,
   });
   const { data: session } = useSession();
-  
 
   const { data, fetchNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery(
-      ["infinite-query", communityName, filterType],
+      ["infinite-query", communityName, view],
       async ({ pageParam = 1 }) => {
         const { data } = await axios.get("/api/posts", {
           params: {
             limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
             page: pageParam,
-            filter: filterType, // new, old, top...
+            filter: view, // new, old, top...
             communityName: communityName,
           },
         });
@@ -65,59 +61,60 @@ const PostFeed: FC<PostFeedProps> = ({
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
       {isLoading
-    ? [1, 2, 3, 4, 5].map((n) => <Skeleton className="w-full h-[600px] rounded-xl" key={n} />) : // Display 5 skeleton posts while loading
-     posts.map((post, index) => {
-        const votesAmt = post.votes.reduce(
-          (acc: number, vote: { type: string }) => {
-            if (vote.type === "UP") return acc + 1;
-            if (vote.type === "DOWN") return acc - 1;
-            return acc;
-          },
-          0
-        );
+        ? [1, 2, 3, 4, 5].map((n) => (
+            <Skeleton className="w-full h-[600px] rounded-xl" key={n} />
+          )) // Display 5 skeleton posts while loading
+        : posts.map((post, index) => {
+            const votesAmt = post.votes.reduce(
+              (acc: number, vote: { type: string }) => {
+                if (vote.type === "UP") return acc + 1;
+                if (vote.type === "DOWN") return acc - 1;
+                return acc;
+              },
+              0
+            );
 
-        const currentVote = post.votes.find(
-          (vote: { userId: string | undefined }) =>
-            vote.userId === session?.user.id
-        );
+            const currentVote = post.votes.find(
+              (vote: { userId: string | undefined }) =>
+                vote.userId === session?.user.id
+            );
 
-        if (index === posts.length - 1) {
-          // Add a ref to the last post in the list
-          return (
-            <li key={post.id} ref={ref}>
-              <Post
-                url={post.embedurl}
-                key={post.id}
-                post={post}
-                commentAmt={post.comments.length}
-                communityName={post.community.name}
-                votesAmt={votesAmt}
-                currentVote={currentVote}
-              />
-            </li>
-          );
-        } else {
-          return (
-            <Post
-              url={post.embedurl}
-              key={post.id}
-              post={post}
-              commentAmt={post.comments.length}
-              communityName={post.community.name}
-              votesAmt={votesAmt}
-              currentVote={currentVote}
-            />
-          );
-        }
-      })}
+            if (index === posts.length - 1) {
+              // Add a ref to the last post in the list
+              return (
+                <li key={post.id} ref={ref}>
+                  <Post
+                    url={post.embedurl}
+                    key={post.id}
+                    post={post}
+                    commentAmt={post.comments.length}
+                    communityName={post.community.name}
+                    votesAmt={votesAmt}
+                    currentVote={currentVote}
+                  />
+                </li>
+              );
+            } else {
+              return (
+                <Post
+                  url={post.embedurl}
+                  key={post.id}
+                  post={post}
+                  commentAmt={post.comments.length}
+                  communityName={post.community.name}
+                  votesAmt={votesAmt}
+                  currentVote={currentVote}
+                />
+              );
+            }
+          })}
 
-  {isFetchingNextPage && (
-    <li className="flex justify-center">
-      <Loader2 className="w-6 h-6 text-zinc-500 animate-spin" />
-    </li>
-  )}
-</ul>
-    
+      {isFetchingNextPage && (
+        <li className="flex justify-center">
+          <Loader2 className="w-6 h-6 text-zinc-500 animate-spin" />
+        </li>
+      )}
+    </ul>
   );
 };
 
