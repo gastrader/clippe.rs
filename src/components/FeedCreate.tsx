@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 "use client";
-import { Icons } from "@/components/Icons";
 import {
   Card,
   CardContent,
@@ -9,9 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import FeedCreateSearchBar from "./FeedCreateSearchBar";
-import { useState } from "react";
+import { FeedCreateSearchBar } from "./FeedCreateSearchBar";
 import { Button } from "./ui/Button";
 import { useMutation } from "@tanstack/react-query";
 import { FeedValidatorPayload } from "@/lib/validators/feed";
@@ -19,19 +16,38 @@ import axios, { AxiosError } from "axios";
 import { toast } from "@/hooks/use-toast";
 import { useCustomToast } from "@/hooks/use-custom-toast";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/Form";
+
+type FeedCreateForm = {
+  feedName: string;
+  communities: { name: string; id: string }[];
+};
 
 const FeedCreate = () => {
   const router = useRouter();
-  const [selectedCommunities, setSelectedCommunities] = useState<
-    Array<{ name: string; id: string }>
-  >([]);
-  const [feedName, setFeedName] = useState("");
+  const form = useForm<FeedCreateForm>({
+    defaultValues: {
+      feedName: "",
+      communities: [],
+    },
+  });
+
   const { loginToast } = useCustomToast();
-  const { mutate: createFeed, isLoading } = useMutation({
-    mutationFn: async () => {
+
+  const { mutateAsync: createFeed, isLoading } = useMutation({
+    mutationFn: async (formData: FeedCreateForm) => {
       const payload: FeedValidatorPayload = {
-        feedName,
-        communities: selectedCommunities,
+        feedName: formData.feedName,
+        communities: formData.communities,
       };
       const { data } = await axios.post("/api/feed/create", payload);
       return data as string;
@@ -66,61 +82,90 @@ const FeedCreate = () => {
       });
     },
     onSuccess: (data) => {
-      
       router.push("/");
     },
   });
-  const handleSubmit = async (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    
-    console.log("Feed name:", feedName);
-    console.log("Selected communities:", selectedCommunities);
+
+  const onSubmit = async (data: FeedCreateForm) => {
+    console.log(data);
+    await createFeed(data);
+    // event.preventDefault();
+    // console.log("Feed name:", feedName);
+    // console.log("Selected communities:", selectedCommunities);
   };
 
   return (
-    <Card className="w-[350px]">
-      <Icons.logo className="mx-auto h-6 w-6 mt-4" />
-      <CardHeader className="mx-auto">
-        <CardTitle>Create a custom feed.</CardTitle>
-        <CardDescription>
-          Add any communities you are subscribed with to your custom feed.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form id="create-feed-form" onSubmit={handleSubmit}>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Feed</Label>
-              <Input
-                id="name"
-                placeholder="Name of your feed"
-                value={feedName}
-                onChange={(e) => setFeedName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Find Communities</Label>
-              {/* @ts-ignore */}
-              <FeedCreateSearchBar
-                setSelectedCommunities={setSelectedCommunities}
-                selectedCommunities={selectedCommunities}
-              />
-            </div>
-          </div>
-        </form>
-        <Button
-          isLoading={isLoading}
-          type="submit"
-          className="w-full mt-6"
-          form="create-feed-form"
-          variant={"outline"}
-          onClick={() => createFeed()}
-        >
-          Create a new feed
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+      >
+        <FormField
+          control={form.control}
+          name="feedName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Feed name</FormLabel>
+              <FormControl>
+                <Input placeholder="My favourites" {...field} />
+              </FormControl>
+              <FormDescription>
+                Something that describes the included communities.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FeedCreateSearchBar />
+        <Button type="submit" isLoading={isLoading}>
+          Create feed
         </Button>
-      </CardContent>
-    </Card>
+      </form>
+    </Form>
   );
 };
+
+// <Card className="w-[350px]">
+//   <Icons.logo className="mx-auto h-6 w-6 mt-4" />
+//   <CardHeader className="mx-auto">
+//     <CardTitle>Create a custom feed.</CardTitle>
+//     <CardDescription>
+//       Add any communities you are subscribed with to your custom feed.
+//     </CardDescription>
+//   </CardHeader>
+//   <CardContent>
+//     <form id="create-feed-form" onSubmit={handleSubmit}>
+//       <div className="grid w-full items-center gap-4">
+//         <div className="flex flex-col space-y-1.5">
+//           <Label htmlFor="name">Feed</Label>
+//           <Input
+//             id="name"
+//             placeholder="Name of your feed"
+//             value={feedName}
+//             onChange={(e) => setFeedName(e.target.value)}
+//           />
+//         </div>
+//         <div className="flex flex-col space-y-1.5">
+//           <Label htmlFor="name">Find Communities</Label>
+//           {/* @ts-ignore */}
+//           <FeedCreateSearchBar
+//             setSelectedCommunities={setSelectedCommunities}
+//             selectedCommunities={selectedCommunities}
+//           />
+//         </div>
+//       </div>
+//     </form>
+//     <Button
+//       isLoading={isLoading}
+//       type="submit"
+//       className="w-full mt-6"
+//       form="create-feed-form"
+//       variant={"outline"}
+//       onClick={() => createFeed()}
+//     >
+//       Create a new feed
+//     </Button>
+//   </CardContent>
+// </Card>;
 
 export default FeedCreate;
