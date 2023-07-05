@@ -35,7 +35,7 @@ const FeedCreate = () => {
   });
 
   const { loginToast } = useCustomToast();
-
+const queryClient = useQueryClient();
   const { mutateAsync: createFeed, isLoading } = useMutation({
     mutationFn: async (formData: FeedCreateForm) => {
       const payload: FeedValidatorPayload = {
@@ -75,7 +75,7 @@ const FeedCreate = () => {
       });
     },
     onSuccess: (data) => {
-      
+      queryClient.invalidateQueries();
       router.back();
       
     },

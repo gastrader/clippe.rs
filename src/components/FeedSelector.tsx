@@ -33,23 +33,29 @@ export const FeedSelector = () => {
           Select feed
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent onInteractOutside={() => setOpen(false)}>
         <DropdownMenuLabel>Available feeds</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {feeds.length > 0 ? (
-          <>
-            {feeds.map((feed) => (
-              <Link href={`/feed/${feed.id}`} passHref key={feed.id}>
-                <DropdownMenuItem className="cursor-pointer">
-                  {feed.name}
-                </DropdownMenuItem>
-              </Link>
-            ))}
-          </>
-        ) : (
-          <span>You don&apos;t have any feeds yet 👻</span>
-        )}
+
+        <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+          {feeds.length > 0 ? (
+            <>
+              {feeds.map((feed) => (
+                <Link href={`/feed/${feed.id}`} passHref key={feed.id}>
+                  <DropdownMenuItem className="cursor-pointer">
+                    {feed.name}
+                  </DropdownMenuItem>
+                </Link>
+              ))}
+            </>
+          ) : (
+            <span>You don&apos;t have any feeds yet 👻</span>
+          )}
+        </div>
+
         <DropdownMenuSeparator />
+
         <DropdownMenuItem>
           <Link href="/feed/create" onClick={() => setOpen(false)}>
             <div className="flex gap-2 justify-center items-center">

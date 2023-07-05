@@ -14,6 +14,9 @@ export async function GET(req: Request) {
       where: {
         userId: session.user.id,
       },
+      orderBy: {
+        name: 'asc'
+      }
     });
 
     return new Response(JSON.stringify(feeds), { status: 200 });
