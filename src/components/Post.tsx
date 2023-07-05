@@ -1,8 +1,8 @@
 import { formatTimeToNow } from "@/lib/utils";
 import { Post, User, Vote } from "@prisma/client";
-import { Link, Link2, MessageSquare } from "lucide-react";
+import { Link as LinkIcon, Link2, MessageSquare } from "lucide-react";
 import React, { FC, useRef, useState } from "react";
-
+import Link from "next/link";
 import PostVoteClient from "./post-vote/PostVoteClient";
 
 import { Badge } from "./ui/Badge";
@@ -71,7 +71,14 @@ const Post: FC<PostProps> = ({
                 <span className="px-1">•</span>
               </>
             ) : null}
-            <span>Posted by u/{post.author.username}</span>{" "}
+            <span>
+              Posted by {" "}
+              <Link legacyBehavior href={`/u/${post.author.username}`}>
+                <a className=" hover:underline">
+                  u/{post.author.username}
+                </a>
+              </Link>
+            </span>{" "}
             {formatTimeToNow(new Date(post.createdAt))}
           </div>
           <a href={`/c/${communityName}/post/${post.id}`}>
@@ -164,7 +171,7 @@ const Post: FC<PostProps> = ({
             handleCopy(`clippe.rs/c/${communityName}/post/${post.id}`)
           }
         >
-          <Link className="h-4 w-4" />
+          <LinkIcon className="h-4 w-4" />
           {copySuccess || "Share"}
         </button>
       </div>
