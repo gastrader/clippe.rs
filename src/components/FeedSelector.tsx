@@ -47,7 +47,7 @@ export const FeedSelector = () => {
             ))}
           </>
         ) : (
-          <span>You don't have any feeds yet 👻</span>
+          <span>You don&apos;t have any feeds yet 👻</span>
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem>

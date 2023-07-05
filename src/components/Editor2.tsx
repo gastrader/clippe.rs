@@ -81,14 +81,14 @@ export const Editor2: React.FC<Editor2Props> = ({ communityId }) => {
   const router = useRouter();
   const pathname = usePathname();
   function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 3)}</code>
-        </pre>
-      ),
-    });
+    // toast({
+    //   title: "You submitted the following values:",
+    //   description: (
+    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+    //       <code className="text-white">{JSON.stringify(data, null, 3)}</code>
+    //     </pre>
+    //   ),
+    // });
     
     const payload: PostCreationRequest = {
         communityId,

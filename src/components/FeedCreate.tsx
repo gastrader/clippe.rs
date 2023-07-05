@@ -1,12 +1,5 @@
 /* eslint-disable no-console */
 "use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { FeedCreateSearchBar } from "./FeedCreateSearchBar";
 import { Button } from "./ui/Button";
@@ -82,7 +75,8 @@ const FeedCreate = () => {
       });
     },
     onSuccess: (data) => {
-      router.push("/");
+      router.back();
+      
     },
   });
 

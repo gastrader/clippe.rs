@@ -54,12 +54,11 @@ model User {
 }
 
 model Feed {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-
-  user        User        @relation(fields: [userId], references: [id])
+  id          String      @id @default(cuid())
+  name        String
+  createdAt   DateTime    @default(now())
   userId      String
+  user        User        @relation(fields: [userId], references: [id])
   communities Community[]
 }
 
@@ -73,19 +72,17 @@ model CommunityModerator {
 }
 
 model Community {
-
   id          String               @id @default(cuid())
   name        String               @unique
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
   creatorId   String?
+  feedId      String?
   posts       Post[]
   creator     User?                @relation("CreatedBy", fields: [creatorId], references: [id])
   subscribers Subscription[]
   moderators  CommunityModerator[]
-  feeds        Feed[]
-
-
+  feeds       Feed[]
 
   @@index([name])
 }
@@ -102,15 +99,15 @@ model Subscription {
 model Post {
   id          String    @id @default(cuid())
   title       String
-  url         String?
-  tag         String?
-  channel     String?
-  sitename    String?
-  embedurl    String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   communityId String
   authorId    String
+  tag         String?
+  url         String?
+  channel     String?
+  embedurl    String?
+  sitename    String?
   community   Community @relation(fields: [communityId], references: [id])
   author      User      @relation(fields: [authorId], references: [id])
   comments    Comment[]
@@ -149,6 +146,13 @@ model CommentVote {
   comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@id([userId, commentId])
+}
+
+model CommunityFeed {
+  communityId String
+  feedId      String
+
+  @@id([communityId, feedId])
 }
 
 enum VoteType {

@@ -4,7 +4,7 @@ import { FeedValidator } from "@/lib/validators/feed";
 import { z } from "zod";
 
 export async function POST(req: Request) {
-  console.log("THE REQUEST IS:", req);
+
   try {
     const session = await getAuthSession();
 
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    console.log("the bod is: ", body);
+    
     const { feedName, communities } = FeedValidator.parse(body);
 
     const feedExists = await db.feed.findFirst({
@@ -39,24 +39,12 @@ export async function POST(req: Request) {
       },
     });
 
-    // Connect the communities to the new feed using the intermediate table
-    // await Promise.all(
-    //   communityIds.map(async (communityId: string) => {
-    //     await db.communityFeed.create({
-    //       data: {
-    //         communityId,
-    //         feedId: feed.id,
-    //       },
-    //     });
-    //   })
-    // );
-
     return new Response(feed.id);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 422 });
     }
 
-    return new Response("Could not create feed", { status: 500 });
+    return new Response("Could not create feed",                                                                                                                                                       );
   }
 }

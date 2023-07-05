@@ -2,13 +2,14 @@ import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import React from "react";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import TopCommunities from "@/components/TopCommunities";
-import { UserFeed } from "@/components/UserFeed";
+import { ViewModeSelector } from "@/components/ViewModeSelector";
+import {UserFeed} from "@/components/UserFeed";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/Button";
 import { HomeIcon } from "lucide-react";
-import { ViewModeSelector } from "../../../components/ViewModeSelector";
+
 
 interface PageProps {
   params: {
@@ -17,8 +18,9 @@ interface PageProps {
   };
 }
 
-const page = async ({ params }: PageProps) => {
-  const { slug, filter = "new" } = params;
+const Page = async ({ params }: PageProps) => {
+  const { slug, filter } = params;
+
 
   const session = await getAuthSession();
   const community = await db.community.findFirst({
@@ -43,10 +45,10 @@ const page = async ({ params }: PageProps) => {
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">Your feed</h1>
       <div className="space-x-2">
-        <ViewModeSelector mode="feed" />
+        <ViewModeSelector />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
-        <UserFeed filterType={filter} initialPosts={[]} />
+        <UserFeed view="new" />
 
         {/* COMMUNITY INFO AND NEW COMPONENT*/}
         <div className="order-first md:order-last">
@@ -59,8 +61,7 @@ const page = async ({ params }: PageProps) => {
             <div className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
               <div className="flex justify-between gap-x-4 py-3">
                 <p className="text-zinc-500">
-                  Personal Homepage. Come here to check in with your favourite
-                  communities
+                  Custom Feed. Come here to check in with certain communities
                 </p>
               </div>
               <Link
@@ -89,4 +90,4 @@ const page = async ({ params }: PageProps) => {
   );
 };
 
-export default page;
+export default Page;

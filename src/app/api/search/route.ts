@@ -12,9 +12,6 @@ export async function GET(req: Request) {
         startsWith: q,
       },
     },
-    include: {
-      _count: true,
-    },
     take: 5,
   });
 
