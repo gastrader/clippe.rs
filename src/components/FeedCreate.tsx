@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/Input";
 import { FeedCreateSearchBar } from "./FeedCreateSearchBar";
 import { Button } from "./ui/Button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FeedValidatorPayload } from "@/lib/validators/feed";
 import axios, { AxiosError } from "axios";
 import { toast } from "@/hooks/use-toast";
@@ -75,6 +75,7 @@ const FeedCreate = () => {
       });
     },
     onSuccess: (data) => {
+      
       router.back();
       
     },
