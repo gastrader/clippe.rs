@@ -19,7 +19,7 @@ export function HomeLayout({ session, children }: HomeLayoutProps) {
 
   return (
     <>
-      <h1 className="font-bold text-3xl md:text-4xl h-14">Your feed</h1>
+      <h1 className="font-bold text-3xl md:text-4xl h-14">General feed</h1>
       <div className="space-x-2 flex flex-row">
         <ViewModeSelector activeView={view as "new" | "old" | undefined} />
         <FeedSelector />
@@ -39,7 +39,7 @@ export function HomeLayout({ session, children }: HomeLayoutProps) {
               <div className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
                 <div className="flex justify-between gap-x-4 py-3">
                   <p className="text-zinc-500">
-                    Personal Homepage. Come here to check in with your favourite
+                    Come here to check in with all of your favourite
                     communities
                   </p>
                 </div>

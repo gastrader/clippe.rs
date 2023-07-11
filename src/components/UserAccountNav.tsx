@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { User } from "next-auth";
+
 import { signOut } from "next-auth/react";
 
 import {
@@ -12,17 +12,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
 import { UserAvatar } from "@/components/UserAvatar";
+import { getAuthSession } from "@/lib/auth"
+import { User as NextAuthUser } from "next-auth";
 
-interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: Pick<User, "name" | "image" | "email">;
+interface User extends NextAuthUser {
+  username: string;
 }
 
-export function UserAccountNav({ user }: UserAccountNavProps) {
+
+interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
+  user: Pick<User, "name" | "image" | "email" | "username" | "id">;
+}
+
+export async function UserAccountNav({ user }: UserAccountNavProps) {
+  
+  const username = user.username
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <UserAvatar
-          user={{ name: user.name || null, image: user.image || null }}
+          user={{
+            name: user.name || null,
+            image: user.image || null,
+          }}
           className="h-8 w-8"
         />
       </DropdownMenuTrigger>
@@ -48,7 +60,9 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
         <DropdownMenuItem asChild>
           <Link href="/c/create">Create Community</Link>
         </DropdownMenuItem>
-
+        <DropdownMenuItem asChild>
+          <Link href={`/u/${username}`}>Profile</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/settings">Settings</Link>
         </DropdownMenuItem>

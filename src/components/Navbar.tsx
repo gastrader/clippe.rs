@@ -27,6 +27,7 @@ const Navbar = async () => {
         {/* actions */}
         {session?.user ? (
           <>
+          {/* @ts-expect-error server component */}
             <UserAccountNav user={session.user} />
             {/* @ts-expect-error server component*/}
             <NotificationsPopoverServer />
