@@ -1,6 +1,6 @@
 import { formatTimeToNow } from "@/lib/utils";
 import { Post, User, Vote } from "@prisma/client";
-import { Link as LinkIcon, Link2, MessageSquare } from "lucide-react";
+import { Link as LinkIcon, Link2, MessageSquare, Trash } from "lucide-react";
 import React, { FC, useRef, useState } from "react";
 import Link from "next/link";
 import PostVoteClient from "./post-vote/PostVoteClient";
@@ -8,6 +8,10 @@ import PostVoteClient from "./post-vote/PostVoteClient";
 import { Badge } from "./ui/Badge";
 import Image from "next/image";
 import { Skeleton } from "./ui/Skeleton";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { toast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
 type PartialVote = Pick<Vote, "type">;
 
 interface PostProps {
@@ -35,12 +39,11 @@ const Post: FC<PostProps> = ({
   const pRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [copySuccess, setCopySuccess] = useState("");
-
+  const { data: session } = useSession();
   const handleCopy = async (url: string) => {
     try {
       await navigator.clipboard.writeText(url);
-      setCopySuccess("Copied!"); // Display 'Copied!' on successful copy
-
+      setCopySuccess("Copied!");
       // Revert back to initial state after 3 seconds
       setTimeout(() => {
         setCopySuccess("");
@@ -49,6 +52,28 @@ const Post: FC<PostProps> = ({
       console.error("Failed to copy", err);
     }
   };
+  const { mutate: deletePost, isLoading } = useMutation({
+    mutationFn: async () => {
+      const payload = {
+        post: post.id,
+      };
+      const res = await axios.delete(`/api/posts/delete/${post.id}`);
+    },
+  onError:(err) => {
+     toast({
+       title: "There was an error.",
+       description: "Could not delete post.",
+       variant: "destructive",
+     });
+  },
+  onSuccess: (data) => {
+     toast({
+       title: "POST DELETED",
+       description: "This post was deleted.",
+       variant: "default",
+     });
+  }
+  });
 
   return (
     <div className="rounded-2xl bg-white shadow-md">
@@ -59,28 +84,35 @@ const Post: FC<PostProps> = ({
           initialVote={currentVote?.type}
         />
         <div className="w-0 flex-1">
-          <div className="max-h-40 mt-1 text-xs text-gray-500">
-            {communityName ? (
-              <>
-                <a
-                  className="underline text-zinc-900 text-sm underline-offset-2"
-                  href={`/c/${communityName}`}
-                >
-                  c/{communityName}
-                </a>
-                <span className="px-1">•</span>
-              </>
-            ) : null}
-            <span>
-              Posted by {" "}
-              <Link legacyBehavior href={`/u/${post.author.username}`}>
-                <a className=" hover:underline">
-                  u/{post.author.username}
-                </a>
-              </Link>
-            </span>{" "}
-            {formatTimeToNow(new Date(post.createdAt))}
+          <div className="max-h-40 mt-1 text-xs text-gray-500 flex justify-between items-center">
+            <div>
+              {communityName ? (
+                <>
+                  <a
+                    className="underline text-zinc-900 text-sm underline-offset-2"
+                    href={`/c/${communityName}`}
+                  >
+                    c/{communityName}
+                  </a>
+                  <span className="px-1">•</span>
+                </>
+              ) : null}
+              <span>
+                Posted by{" "}
+                <Link legacyBehavior href={`/u/${post.author.username}`}>
+                  <a className=" hover:underline">u/{post.author.username}</a>
+                </Link>
+              </span>{" "}
+              {formatTimeToNow(new Date(post.createdAt))}
+            </div>
+            {session?.user.id === post.author.id && ( // Check if the current user is the author of the post
+              <button onClick={() => deletePost()} className="ml-2">
+                <Trash className="w-4 h-4 text-red-500" />{" "}
+                {/* Display a delete button */}
+              </button>
+            )}
           </div>
+
           <a href={`/c/${communityName}/post/${post.id}`}>
             <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
               <div

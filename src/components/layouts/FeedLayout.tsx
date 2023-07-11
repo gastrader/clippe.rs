@@ -18,11 +18,11 @@ type FeedLayoutProps = {};
 
 export const FeedLayout = ({}: FeedLayoutProps) => {
   const { feedId, view = "new" } = useParams();
-
+  console.log("THE VIEW IS NOW -------------++++", view)
   return (
     <>
       <div className="space-x-2 flex">
-        <ViewModeSelector mode="feed" feedId={feedId} />
+        <ViewModeSelector mode="feed" feedId={feedId} activeView={view as ViewType}/>
         <FeedSelector />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
@@ -39,7 +39,7 @@ export const FeedLayout = ({}: FeedLayoutProps) => {
             <div className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
               <div className="flex justify-between gap-x-4 py-3">
                 <p className="text-zinc-500">
-                  Custom Feed. Come here to check in with certain communities
+                  Custom Feed. Come here to check in with specific communities
                 </p>
               </div>
               <Link

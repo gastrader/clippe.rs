@@ -27,7 +27,6 @@ const Page = async ({ params }: PageProps) => {
   const { feedId, view = "new" } = params;
 
   const session = await getAuthSession();
-  console.log("-----------THE FEED ID IS:", feedId);
 
   const feed = await db.feed.findFirst({
     where: { id: feedId },
@@ -40,7 +39,7 @@ const Page = async ({ params }: PageProps) => {
       </h1>
       {/* @ts-expect-error server component */}
       <FeedLayout >
-        <FeedsFeed view="old" initialPosts={[]} feed={feedId} />
+        <FeedsFeed view="new" initialPosts={[]} feed={feedId} />
       </FeedLayout>
     </>
   );

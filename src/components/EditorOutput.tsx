@@ -9,6 +9,8 @@ interface EditorOutputProps {
   sitename: string;
 }
 
+const IFRAME_PARENT = "&parent=localhost&parent=clippe.rs";
+
 const EditorOutput: FC<EditorOutputProps> = ({ content, sitename }) => {
   if (sitename === "Kick") {
     return (
@@ -27,7 +29,7 @@ const EditorOutput: FC<EditorOutputProps> = ({ content, sitename }) => {
   return (
     <div className="h-fit">
       <iframe
-        src={content}
+        src={`${content}${IFRAME_PARENT}`}
         height="600"
         width="100%"
         frameBorder="0"
