@@ -33,48 +33,45 @@ export async function POST(req: Request) {
       );
     }
     const linkUrl = new URL(url);
-        const embededUrl = null;
-        const siteName = null;
-        const channel = null;
+    const embededUrl = null;
+    const siteName = null;
+    const channel = null;
 
-     if (linkUrl.hostname.includes("kick.com")) {
-      console.log("WE ARE IN THE KICK BACKEND")
-       const siteName = "Kick";
-       let pathName = linkUrl.pathname.slice(1);
-       let channel = pathName.split("/")[0];
-       channel = channel.charAt(0).toUpperCase()+ channel.slice(1)
-       const embedUrl = linkUrl;
-       console.log(
-         `Embeded URL: ${url}, Site Name: ${siteName}, Channel: ${channel}`
-       );
-       await db.post.create({
-         data: {
-           title,
-           url,
-           tag,
-           sitename: siteName,
-           embedurl: url,
-           channel: channel,
-           authorId: session.user.id,
-           communityId,
-         },
-       });
-       return new Response(communityId);
-     }
+    if (linkUrl.hostname.includes("kick.com")) {
+      console.log("WE ARE IN THE KICK BACKEND");
+      const siteName = "Kick";
+      let pathName = linkUrl.pathname.slice(1);
+      let channel = pathName.split("/")[0];
+      channel = channel.charAt(0).toUpperCase() + channel.slice(1);
+      const embedUrl = linkUrl;
+      console.log(
+        `Embeded URL: ${url}, Site Name: ${siteName}, Channel: ${channel}`
+      );
+      await db.post.create({
+        data: {
+          title,
+          url,
+          tag,
+          sitename: siteName,
+          embedurl: url,
+          channel: channel,
+          authorId: session.user.id,
+          communityId,
+        },
+      });
+      return new Response(communityId);
+    }
     const response = await axios.get(url);
     const pageData = response.data;
-    
-
 
     if (linkUrl.hostname.includes("twitch.tv")) {
-      const urlRegex = /<meta property="og:video:secure_url" content="(.*?)"/;
+      console.log("we are inside twitch")
+      const siteName = "Twitch";
+
+      const urlRegex = /<meta property="og:video" content="(.*?)"/;
       const urlMatch = pageData.match(urlRegex);
       const embededUrl2 = urlMatch ? urlMatch[1] : null;
       const embededUrl = embededUrl2.replace(/&amp;/, "&");
-
-      const siteNameRegex = /<meta property="og:site_name" content="(.*?)"/;
-      const siteNameMatch = pageData.match(siteNameRegex);
-      const siteName = siteNameMatch ? siteNameMatch[1] : null;
 
       const channelRegex = /<meta property="og:title" content="(.*?) -/;
       const channelMatch = pageData.match(channelRegex);
@@ -101,10 +98,7 @@ export async function POST(req: Request) {
       const urlMatch = pageData.match(urlRegex);
       const embededUrl2 = urlMatch ? urlMatch[1] : null;
       const embededUrl = embededUrl2.replace(/&amp;/g, "&");
-
-      const siteNameRegex = /<meta property="og:site_name" content="(.*?)"/;
-      const siteNameMatch = pageData.match(siteNameRegex);
-      const siteName = siteNameMatch ? siteNameMatch[1] : null;
+      const siteName = "Youtube";
 
       const channelRegex = /<link itemprop="name" content="(.*?)"/;
       const channelMatch = pageData.match(channelRegex);
@@ -125,8 +119,7 @@ export async function POST(req: Request) {
           communityId,
         },
       });
-    } 
-
+    }
 
     return new Response(communityId);
   } catch (error) {

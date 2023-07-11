@@ -24,7 +24,7 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  const { feedId, view = "new" } = params;
+  const { feedId, view } = params;
 
   const session = await getAuthSession();
   console.log("-----------THE FEED ID IS:", feedId);
@@ -39,8 +39,8 @@ const Page = async ({ params }: PageProps) => {
         Selected Feed: {feed.name}
       </h1>
       {/* @ts-expect-error server component */}
-      <FeedLayout >
-        <FeedsFeed view="old" initialPosts={[]} feed={feedId} />
+      <FeedLayout feeds={feedId}>
+        <FeedsFeed view={view as ViewType} initialPosts={[]} feed={feedId} />
       </FeedLayout>
     </>
   );

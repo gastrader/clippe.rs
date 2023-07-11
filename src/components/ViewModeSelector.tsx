@@ -7,9 +7,11 @@ import { ArrowUp10, Sparkles } from "lucide-react";
 export const ViewModeSelector = ({
   mode = "default",
   activeView = "new",
+  feedId,
 }: {
   mode?: "community" | "feed" | "default";
   activeView?: "old" | "new";
+  feedId?: string
 }) => {
   const { slug } = useParams();
   const router = useRouter();
@@ -18,7 +20,7 @@ export const ViewModeSelector = ({
     if (mode === "community" && slug) {
       router.push(`/c/${slug}/${filter}`);
     } else if (mode === "feed") {
-      router.push(`/feed/${filter}`);
+      router.push(`/feed/${feedId}/${filter}`);
     } else {
       router.push(`/${filter}`);
     }

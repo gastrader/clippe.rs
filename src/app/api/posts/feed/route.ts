@@ -6,19 +6,18 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { limit, page, communityName, filter } = z
+    const { limit, page, feed, filter } = z
       .object({
         limit: z.string(),
         page: z.string(),
-        // communityName: z.string().nullish().optional(),
-        communityName: z.string(),
+        feed: z.string().optional(),
         filter: z.enum(["new", "old"]).optional(),
       })
       .parse({
-        communityName: url.searchParams.get("communityName"),
         limit: url.searchParams.get("limit"),
         page: url.searchParams.get("page"),
         filter: url.searchParams.get("filter"),
+        feed: url.searchParams.get("feed")
       });
 
     let orderBy = {};
@@ -32,24 +31,15 @@ export async function GET(req: Request) {
         createdAt: "asc",
       };
     }
-
-    // let whereClause = {};
-
-    // if (communityName) {
-    //   whereClause = {
-    //     community: {
-    //       name: communityName,
-    //     },
-    //   };
-    // } else if (session) {
-    //   whereClause = {
-    //     community: {
-    //       id: {
-    //         in: followedCommunitiesIds,
-    //       },
-    //     },
-    //   };
-    // }
+    const feedData = await db.feed.findUnique({
+      where: {
+        id: feed,
+      },
+      include: {
+        communities: true, // Include the communities that are part of the feed
+      },
+    });
+    const communityIds = feedData?.communities.map((community) => community.id);
 
     const posts = await db.post.findMany({
       take: parseInt(limit),
@@ -62,12 +52,12 @@ export async function GET(req: Request) {
         comments: true,
       },
       where: {
-        community: {
-          name: communityName,
+        communityId: {
+          in: communityIds,
         },
       },
     });
-    
+
     return new Response(JSON.stringify(posts));
   } catch (error) {
     return new Response("Could!! not fetch posts", { status: 500 });
