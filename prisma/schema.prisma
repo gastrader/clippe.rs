@@ -41,6 +41,7 @@ model User {
   emailVerified         DateTime?
   image                 String?
   name                  String?
+  emailNotificationsEnabled Boolean? @default(true)
   createdCommunities    Community[]          @relation("CreatedBy")
   moderatingCommunities CommunityModerator[]
   sessions              Session[]

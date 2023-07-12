@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 
 import { UserNameForm } from "@/components/UserNameForm";
 import { authOptions, getAuthSession } from "@/lib/auth";
+import { EmailNotificationForm } from "@/components/EmailNotificationForm";
+import { db } from "@/lib/db";
 
 export const metadata = {
   title: "Settings",
@@ -14,6 +16,13 @@ export default async function SettingsPage() {
   if (!session?.user) {
     redirect(authOptions?.pages?.signIn || "/login");
   }
+  const userVariable = await db.user.findFirst({
+    where:{
+      id: session.user.id
+    }
+  })
+
+  const emailNotif = userVariable?.emailNotificationsEnabled
 
   return (
     <div className="max-w-4xl mx-auto py-12">
@@ -26,6 +35,13 @@ export default async function SettingsPage() {
               id: session.user.id,
               username: session.user.username || "",
             }}
+          />
+          <EmailNotificationForm
+            user={{
+              id: session.user.id,
+              notifs: emailNotif || true,
+            }}
+            emailNotif={emailNotif || true}
           />
         </div>
       </div>

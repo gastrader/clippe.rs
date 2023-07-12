@@ -5,7 +5,7 @@ export async function GET(req: Request) {
   const q = url.searchParams.get("q");
 
   if (!q) return new Response("Invalid query", { status: 400 });
-    console.log("q is:",q)
+   
  const user = await db.user.findUnique({
    where: {
      username: q,

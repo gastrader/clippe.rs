@@ -30,7 +30,7 @@ export function HomeLayout({ session, children }: HomeLayoutProps) {
         {/* COMMUNITY INFO AND NEW COMPONENT*/}
         <div className="order-first md:order-last">
           {session && (
-            <div className="overflow-hidden h-fit rounded-lg border border-gray-200">
+            <div className="overflow-hidden h-fit rounded-lg border border-gray-200 mb-4">
               <div className="bg-emerald-100 px-6 py-4">
                 <p className="font-semibold py-3 flex items-center gap-1.5">
                   <HomeIcon className="w-4 h-4"></HomeIcon> Home

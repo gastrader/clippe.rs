@@ -51,13 +51,13 @@ export function ProfileLayout({ session, children }: ProfileLayoutProps) {
 
         {/* COMMUNITY INFO AND NEW COMPONENT*/}
         <div className="order-first md:order-last">
-          <div className="overflow-hidden h-fit rounded-lg border border-gray-200">
+          <div className="overflow-hidden h-fit rounded-lg border border-gray-200 mb-4">
             <div className="bg-yellow-100 px-6 py-4 justify-between flex items-center">
               <p className="font-semibold py-3 flex items-center gap-1.5">
                 <PersonIcon className="w-4 h-4"></PersonIcon>{" "}
                 {data?.username?.toUpperCase()}&apos;s Profile
               </p>
-              {session?.user.id === userId.userId && (
+              {session?.user.username === userId.userId && (
                 <Link href="/settings">
                   <Cog />
                 </Link>
