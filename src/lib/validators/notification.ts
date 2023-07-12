@@ -1,5 +1,5 @@
 import { z } from "zod";
 
 export const NotificationValidator = z.object({
-  name: z.boolean(),
+  notification_emails: z.boolean(),
 });

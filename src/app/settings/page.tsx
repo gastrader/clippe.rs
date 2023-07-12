@@ -37,11 +37,7 @@ export default async function SettingsPage() {
             }}
           />
           <EmailNotificationForm
-            user={{
-              id: session.user.id,
-              notifs: emailNotif || true,
-            }}
-            emailNotif={emailNotif || true}
+            
           />
         </div>
       </div>

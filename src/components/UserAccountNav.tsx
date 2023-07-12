@@ -51,7 +51,7 @@ export async function UserAccountNav({ user }: UserAccountNavProps) {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/">Feed</Link>
+          <Link href="/">Home</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/feed/create">Create Feed</Link>

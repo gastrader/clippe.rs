@@ -12,15 +12,16 @@ export async function PATCH(req: Request) {
     }
 
     const body = await req.json();
-    const { name } = NotificationValidator.parse(body);
-
-    // update username
+    
+    const { notification_emails } = NotificationValidator.parse(body);
+    
+    // update notifications
     await db.user.update({
       where: {
         id: session.user.id,
       },
       data: {
-        emailNotificationsEnabled: name,
+        emailNotificationsEnabled: notification_emails,
       },
     });
 
