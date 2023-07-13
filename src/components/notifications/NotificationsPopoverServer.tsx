@@ -13,7 +13,7 @@ const NotificationsPopoverServer = async () => {
     0,
     -1
   )) as { postId: string; type: string }[];
-
+    // @ts-ignore
   return <NotificationsPopover initialNotifications={notifications} />;
 };
 
