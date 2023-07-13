@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import { Skeleton } from "./ui/Skeleton";
 import { ViewType } from "../types";
 import { useRouter } from "next/router";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import ProfilePost from "./ProfilePost";
 
 type UserFeedProps = {
@@ -28,7 +28,7 @@ export const ProfileFeed = ({ view = "new" }: UserFeedProps) => {
   const { data: session } = useSession();
   const params = useParams();
 
-  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching } =
+  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching, error, isFetched } =
     useInfiniteQuery<ExtendedPost[]>(
       ["infinite-query", view],
       async ({ pageParam = 1 }) => {
@@ -51,6 +51,7 @@ export const ProfileFeed = ({ view = "new" }: UserFeedProps) => {
         cacheTime: 0,
       }
     );
+
 
   useEffect(() => {
     if (entry?.isIntersecting) {

@@ -25,7 +25,7 @@ export function ProfileLayout({ session, children }: ProfileLayoutProps) {
   const {
     data: data,
     isFetching,
-    error,
+    error, isFetched
   } = useQuery({
     queryFn: async () => {
       const res = await axios.get(`../api/profile/query?q=${userId.userId}`);

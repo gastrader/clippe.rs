@@ -68,7 +68,8 @@ export async function POST(req: Request) {
       console.log("we are inside twitch")
       const siteName = "Twitch";
 
-      const urlRegex = /<meta property="og:video" content="(.*?)"/;
+      const urlRegex =
+        /<meta property="og:video:secure_url" content="(.*?)"|<meta property="og:video" content="(.*?)"/;
       const urlMatch = pageData.match(urlRegex);
       const embededUrl2 = urlMatch ? urlMatch[1] : null;
       const embededUrl = embededUrl2.replace(/&amp;/, "&");

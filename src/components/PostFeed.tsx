@@ -60,7 +60,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName, view }) => {
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
-      {isFetching || isLoading
+      {isLoading
         ? [1, 2, 3, 4, 5].map((n) => (
             <Skeleton className="w-full h-[600px] rounded-xl" key={n} />
           )) // Display 5 skeleton posts while loading
@@ -115,6 +115,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName, view }) => {
         </li>
       )}
     </ul>
+
   );
 };
 
