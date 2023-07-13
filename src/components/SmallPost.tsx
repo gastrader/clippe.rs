@@ -1,8 +1,4 @@
 
-import { ListStart } from "lucide-react";
-import Link from "next/link";
-import { buttonVariants } from "./ui/Button";
-
 const SmallPost = async () => {
   return (
     <div className=" h-fit ">

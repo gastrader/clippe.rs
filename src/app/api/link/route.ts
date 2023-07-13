@@ -32,10 +32,6 @@ export async function GET(req: Request) {
     site_name = siteNameMatch ? siteNameMatch[1] : "";
  } 
 
- console.log("The channel is:", channel);
- console.log("The title is:", title);
- console.log("The site name is:", site_name);
-
  const imageMatch = res.data.match(/<meta property="og:image" content="(.*?)"/);
  const imageUrl = imageMatch ? imageMatch[1] : "";
 

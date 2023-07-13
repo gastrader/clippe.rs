@@ -1,17 +1,17 @@
 "use client";
 import { ReactNode } from "react";
-import FeedSelector from "../FeedSelector";
-import { Cog, HomeIcon } from "lucide-react";
+
+import { Cog } from "lucide-react";
 import Link from "next/link";
-import { buttonVariants } from "../ui/Button";
+
 import TopCommunities from "../TopCommunities";
 import { Session } from "next-auth";
-import { ViewModeSelector } from "../ViewModeSelector";
-import { notFound, useParams } from "next/navigation";
+
+import {  useParams } from "next/navigation";
 import { UserAvatar } from "../UserAvatar";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { Skeleton } from "../ui/Skeleton";
 
 type ProfileLayoutProps = {
@@ -25,7 +25,7 @@ export function ProfileLayout({ session, children }: ProfileLayoutProps) {
   const {
     data: data,
     isFetching,
-    error, isFetched
+    
   } = useQuery({
     queryFn: async () => {
       const res = await axios.get(`../api/profile/query?q=${userId.userId}`);

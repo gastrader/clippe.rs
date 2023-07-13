@@ -1,6 +1,5 @@
 import { getAuthSession } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { CommunityValidator } from "@/lib/validators/community";
+
 import { z } from "zod";
 import { redis } from "../../../lib/redis";
 
@@ -18,7 +17,7 @@ export async function GET(req: Request) {
       -1
     );
 
-    console.log(notifications);
+    
 
     const parsedNotifications = notifications.map((n) => JSON.parse(n));
 

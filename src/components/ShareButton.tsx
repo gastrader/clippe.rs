@@ -1,7 +1,7 @@
 "use client";
 import { Link } from "lucide-react";
-import { useRouter } from "next/router";
-import React, { FC, useState } from "react";
+
+import React, { useState } from "react";
 
 interface ShareButtonProps {
   post_id: string;

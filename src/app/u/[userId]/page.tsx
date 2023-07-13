@@ -1,7 +1,5 @@
-import { UserFeed } from "@/components/UserFeed";
-import { getAuthSession } from "@/lib/auth";
 
-import { HomeLayout } from "@/components/layouts/HomeLayout";
+import { getAuthSession } from "@/lib/auth";
 import { ProfileLayout } from "@/components/layouts/ProfileLayout";
 import { ProfileFeed } from "@/components/ProfileFeed";
 

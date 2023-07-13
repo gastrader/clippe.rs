@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db"; // Import your database instance
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 
 // Define your API route
 
@@ -16,7 +16,7 @@ export async function DELETE(req: NextApiRequest) {
   }
   const postId = await req.url?.split("/").pop();
 
-  console.log("THE POST req.body is,", postId);
+  
     if (!postId) {
       return new Response("Post ID required", { status: 400});
     }
@@ -40,7 +40,7 @@ export async function DELETE(req: NextApiRequest) {
     });
      return new Response("Success", { status: 200 });
   } catch (error) {
-    console.error(error);
+    
     return new Response("Could not delete post.", { status: 500 });
   }
 }

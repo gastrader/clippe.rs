@@ -1,7 +1,5 @@
 import CloseModal from "@/components/CloseModal";
-import FeedCreate from "@/components/FeedCreate";
 import FeedCreateModal from "@/components/FeedCreateModal";
-import SignIn from "@/components/SignIn";
 import { FC } from "react";
 
 const page: FC = () => {

@@ -45,7 +45,6 @@ export async function DELETE(req: NextApiRequest, res: NextApiResponse) {
 
     return new Response("Success", { status: 200 });
   } catch (error) {
-    console.error(error);
     return new Response("Could not delete comment.", { status: 500 });
   }
 }

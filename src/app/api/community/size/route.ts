@@ -24,8 +24,6 @@ export async function GET(req: Request) {
       ...community,
       subscribers: community.subscribers.length,
     }));
-
-    console.log(transformedCommunities)
     
     return new Response(JSON.stringify(transformedCommunities));
   } catch (error) {

@@ -4,19 +4,15 @@ import { Link as LinkIcon, Link2, MessageSquare, Trash } from "lucide-react";
 import React, { FC, useRef, useState } from "react";
 import Link from "next/link";
 import PostVoteClient from "./post-vote/PostVoteClient";
-
 import { Badge } from "./ui/Badge";
 import Image from "next/image";
-import { Skeleton } from "./ui/Skeleton";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import {
-  QueryClient,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 type PartialVote = Pick<Vote, "type">;
 
 interface PostProps {
@@ -54,13 +50,13 @@ const Post: FC<PostProps> = ({
         setCopySuccess("");
       }, 3000);
     } catch (err) {
-      console.error("Failed to copy", err);
+      
     }
   };
   const queryClient = useQueryClient();
-  const { mutate: deletePost, isLoading } = useMutation({
+  const { mutate: deletePost } = useMutation({
     mutationFn: async () => {
-      console.log("THE POST ID IS++++++", post.id);
+      
 
       const res = await axios.delete(`/api/posts/delete/${post.id}`);
     },

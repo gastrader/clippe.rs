@@ -1,7 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { PostValidator } from "@/lib/validators/post";
-import { CommunitySubscriptionValidator } from "@/lib/validators/community";
 import { z } from "zod";
 import axios from "axios";
 
@@ -33,20 +32,16 @@ export async function POST(req: Request) {
       );
     }
     const linkUrl = new URL(url);
-    const embededUrl = null;
-    const siteName = null;
-    const channel = null;
+
 
     if (linkUrl.hostname.includes("kick.com")) {
-      console.log("WE ARE IN THE KICK BACKEND");
+      
       const siteName = "Kick";
       let pathName = linkUrl.pathname.slice(1);
       let channel = pathName.split("/")[0];
       channel = channel.charAt(0).toUpperCase() + channel.slice(1);
-      const embedUrl = linkUrl;
-      console.log(
-        `Embeded URL: ${url}, Site Name: ${siteName}, Channel: ${channel}`
-      );
+      
+
       await db.post.create({
         data: {
           title,
@@ -65,7 +60,7 @@ export async function POST(req: Request) {
     const pageData = response.data;
 
     if (linkUrl.hostname.includes("twitch.tv")) {
-      console.log("we are inside twitch")
+      
       const siteName = "Twitch";
 
       const urlRegex =
@@ -78,9 +73,7 @@ export async function POST(req: Request) {
       const channelMatch = pageData.match(channelRegex);
       const channel = channelMatch ? channelMatch[1] : null;
 
-      console.log(
-        `Embeded URL: ${embededUrl}, Site Name: ${siteName}, Channel: ${channel}`
-      );
+
       await db.post.create({
         data: {
           title,
@@ -105,9 +98,6 @@ export async function POST(req: Request) {
       const channelMatch = pageData.match(channelRegex);
       const channel = channelMatch ? channelMatch[1] : null;
 
-      console.log(
-        `Embeded URL: ${embededUrl}, Site Name: ${siteName}, Channel: ${channel}`
-      );
       await db.post.create({
         data: {
           title,

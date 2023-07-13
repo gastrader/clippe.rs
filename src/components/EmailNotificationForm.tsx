@@ -2,23 +2,17 @@
 import { Switch } from "@/components/ui/Switch"; // Import a Checkbox or Switch component
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "./ui/Card";
-import { Label } from "./ui/Label";
+
 import { Button } from "./ui/Button";
-import { cn } from "@/lib/utils";
+
 import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { User } from "next-auth";
-import { boolean, z } from "zod";
+import {  z } from "zod";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
-import { NotificationValidator } from "@/lib/validators/notification";
 import {
   Form,
   FormControl,
@@ -49,7 +43,7 @@ export function EmailNotificationForm() {
     queryKey: ["data"],
     queryFn: async () => {
       const res = await axios.get("/api/profile/emailNotifications/query");
-      console.log("THE SWITCH SHOULD BE:", res.data);
+      
       return res.data;
     },
   });
@@ -73,7 +67,7 @@ export function EmailNotificationForm() {
         security_emails: true,
       });
     }
-  }, [status, data]);
+  }, [status, data, form]);
 
   const router = useRouter();
   const { mutate: updateNotifs } = useMutation({
@@ -114,16 +108,16 @@ export function EmailNotificationForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
+  // function onSubmit(data: z.infer<typeof FormSchema>) {
+  //   toast({
+  //     title: "You submitted the following values:",
+  //     description: (
+  //       <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+  //         <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+  //       </pre>
+  //     ),
+  //   });
+  // }
 
   return (
     <Card>

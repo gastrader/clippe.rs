@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db"; // Import your database instance
-import { NextApiRequest, NextApiResponse } from "next";
+
 
 // Define your API route
 
@@ -19,7 +19,7 @@ export async function DELETE(
     }
     const postId  = await req.json();
     
-    console.log("THE POST req.body is,", postId)
+    
         // Check if the post ID was provided
     if (!postId) {
       return new Response("Post ID required", { status: 400});
@@ -44,7 +44,7 @@ export async function DELETE(
     });
      return new Response("Success", { status: 200 });
   } catch (error) {
-    console.error(error);
+    
     return new Response("Could not delete post.", { status: 500 });
   }
 }

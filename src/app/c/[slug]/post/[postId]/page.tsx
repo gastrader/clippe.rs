@@ -88,10 +88,16 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
                   <div className="items-center flex">
                     {/* @ts-ignore IDK WHY THIS IS ERRORING  */}
                     <ShareButton
+                      // @ts-ignore
                       community_name={post?.community.name ?? ""}
                       post_id={post?.id || ""}
                     />
-                    <DeleteButton postId={post?.id || ""} postAuthor={post?.author.id}/>
+                    {/*  // @ts-ignore */}
+                    <DeleteButton
+                      postId={post?.id || ""}
+                      // @ts-ignore
+                      postAuthor={post?.author.id}
+                    />
                   </div>
                 </div>
                 <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">

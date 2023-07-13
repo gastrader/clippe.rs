@@ -1,6 +1,5 @@
 import { getAuthSession } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { CommunityValidator } from "@/lib/validators/community";
+
 import { z } from "zod";
 import { redis } from "../../../../lib/redis";
 

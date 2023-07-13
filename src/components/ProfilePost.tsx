@@ -4,10 +4,8 @@ import { Link as LinkIcon, Link2, MessageSquare, Trash } from "lucide-react";
 import React, { FC, useRef, useState } from "react";
 import Link from "next/link";
 import PostVoteClient from "./post-vote/PostVoteClient";
-
 import { Badge } from "./ui/Badge";
 import Image from "next/image";
-import { Skeleton } from "./ui/Skeleton";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
@@ -58,14 +56,14 @@ const ProfilePost: FC<ProfilePostProps> = ({
       };
       const res = await axios.delete(`/api/posts/delete/${post.id}`);
     },
-    onError: (err) => {
+    onError: () => {
       toast({
         title: "There was an error.",
         description: "Could not delete post.",
         variant: "destructive",
       });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast({
         title: "POST DELETED",
         description: "This post was deleted.",

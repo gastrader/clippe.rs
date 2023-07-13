@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import { redis } from "../../lib/redis";
 import { NotificationsPopover } from "./NotificationsPopoverClient";
-import axios from "axios";
+
 
 const NotificationsPopoverServer = async () => {
   const session = await getServerSession(authOptions);
