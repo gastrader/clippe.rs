@@ -42,8 +42,7 @@ const page = async ({ params }: PageProps) => {
       <MiniCreatePost session={session} />
       <UserFeed
         // initialPosts={community.posts}
-        initialPosts={[]}
-        filterType="new"
+        view="new"
       />
     </div>
   );
