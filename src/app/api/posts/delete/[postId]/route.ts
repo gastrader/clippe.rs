@@ -1,10 +1,10 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db"; // Import your database instance
-import { NextApiRequest } from "next";
+
 
 // Define your API route
 
-export async function DELETE(req: NextApiRequest) {
+export async function DELETE(req: Request) {
   if (req.method !== "DELETE") {
     return new Response("Method not allowed", { status: 405 });
   }
