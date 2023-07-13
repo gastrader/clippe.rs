@@ -63,9 +63,9 @@ export const ProfileFeed = ({ view = "new" }: UserFeedProps) => {
   return (
     <div className="flex flex-col col-span-2 space-y-6">
       <ul className="flex flex-col col-span-2 space-y-6">
-        {isLoading
-          ? [1, 2].map((n) => (
-              <Skeleton className="w-full h-[600px] rounded-xl" key={n} />
+        {isLoading 
+          ? [1, 2, 3, 4, 5, 6].map((n) => (
+              <Skeleton className="w-full h-[200px] rounded-xl" key={n} />
             ))
           : posts.map((post, index) => {
               const votesAmt = post.votes.reduce(

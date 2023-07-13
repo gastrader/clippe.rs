@@ -26,7 +26,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName, view }) => {
   });
   const { data: session } = useSession();
 
-  const { data, fetchNextPage, isFetchingNextPage, isLoading } =
+  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching } =
     useInfiniteQuery(
       ["infinite-query", communityName, view],
       async ({ pageParam = 1 }) => {
@@ -60,7 +60,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName, view }) => {
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
-      {isLoading
+      {isFetching || isLoading
         ? [1, 2, 3, 4, 5].map((n) => (
             <Skeleton className="w-full h-[600px] rounded-xl" key={n} />
           )) // Display 5 skeleton posts while loading

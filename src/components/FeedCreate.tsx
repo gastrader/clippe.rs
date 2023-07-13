@@ -77,7 +77,11 @@ const queryClient = useQueryClient();
     onSuccess: (data) => {
       queryClient.invalidateQueries();
       router.back();
-      
+      toast({
+        title: "Success!",
+        description: "Your feed has been created",
+        variant: "default",
+      })
     },
   });
 

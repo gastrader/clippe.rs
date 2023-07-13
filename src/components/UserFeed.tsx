@@ -24,7 +24,7 @@ export const UserFeed = ({ view = "new" }: UserFeedProps) => {
   });
   const { data: session } = useSession();
 
-  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching } =
+  const { data, fetchNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<ExtendedPost[]>(
       ["infinite-query", view],
       async ({ pageParam = 1 }) => {
@@ -58,7 +58,7 @@ export const UserFeed = ({ view = "new" }: UserFeedProps) => {
   return (
     <div className="flex flex-col col-span-2 space-y-6">
       <ul className="flex flex-col col-span-2 space-y-6">
-        {isLoading
+        {isLoading 
           ? [1, 2].map((n) => (
               <Skeleton className="w-full h-[600px] rounded-xl" key={n} />
             ))
