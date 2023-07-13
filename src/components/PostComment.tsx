@@ -16,6 +16,7 @@ import { Label } from "./ui/Label";
 import { Textarea } from "./ui/Textarea";
 import { toast } from "../hooks/use-toast";
 import { useSession } from "next-auth/react";
+import DeleteCommentButton from "./DeleteCommentButton";
 
 type ExtendedComment = Comment & {
   votes: CommentVote[];
@@ -109,6 +110,7 @@ const PostComment: FC<PostCommentProps> = ({
           <MessageSquare className="h-4 w-4 mr-1.5" />
           Reply
         </Button>
+        <DeleteCommentButton commentAuthorId={comment.authorId} commentId={comment.id}/>
       </div>
 
       {isReplying ? (
