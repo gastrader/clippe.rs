@@ -1,10 +1,10 @@
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db"; // Import your database instance
-import { NextApiRequest, NextApiResponse } from "next";
 
-export async function DELETE(req: NextApiRequest, res: NextApiResponse) {
+
+export async function DELETE(req: Request) {
   if (req.method !== "DELETE") {
-    return res.status(405).send("Method not allowed");
+    return new Response("Method not allowed", { status: 405 });
   }
 
   const session = await getAuthSession();
