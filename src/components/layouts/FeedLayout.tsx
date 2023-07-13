@@ -11,6 +11,7 @@ import { Boxes } from "lucide-react";
 import FeedsFeed from "@/components/FeedsFeed";
 import FeedSelector from "@/components/FeedSelector";
 import { ViewType } from "@/types";
+import ToFeedButton from "../ToFeedButton";
 
 type FeedLayoutProps = {};
 
@@ -19,7 +20,8 @@ export const FeedLayout = ({}: FeedLayoutProps) => {
  
   return (
     <>
-      <div className="space-x-2 flex">
+    <ToFeedButton />
+      <div className="space-x-2 flex mt-4">
         <ViewModeSelector
           mode="feed"
           feedId={feedId}

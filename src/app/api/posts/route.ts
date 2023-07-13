@@ -33,24 +33,6 @@ export async function GET(req: Request) {
       };
     }
 
-    // let whereClause = {};
-
-    // if (communityName) {
-    //   whereClause = {
-    //     community: {
-    //       name: communityName,
-    //     },
-    //   };
-    // } else if (session) {
-    //   whereClause = {
-    //     community: {
-    //       id: {
-    //         in: followedCommunitiesIds,
-    //       },
-    //     },
-    //   };
-    // }
-
     const posts = await db.post.findMany({
       take: parseInt(limit),
       skip: (parseInt(page) - 1) * parseInt(limit), // skip should start from 0 for page 1

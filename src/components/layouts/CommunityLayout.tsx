@@ -7,6 +7,7 @@ import AboutCommunity from "@/components/AboutCommunity";
 import { ViewModeSelector } from "../ViewModeSelector";
 import { Session } from "next-auth";
 import { CommunityWithSubscribers, ViewType } from "../../types";
+import ToFeedButton from "../ToFeedButton";
 
 type CommunityLayoutProps = {
   community: CommunityWithSubscribers;
@@ -27,10 +28,13 @@ export const CommunityLayout = ({
 
   return (
     <>
-      <h1 className="font-bold text-3xl md:text-4xl h-14">
+      <h1 className="font-bold text-3xl md:text-4xl h-14 ">
         c/{community.name}
       </h1>
-      <ViewModeSelector mode="community" activeView={view as ViewType} />
+      <ToFeedButton />
+      <div className="mt-4">
+        <ViewModeSelector mode="community" activeView={view as ViewType} />
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
         <div className="md:col-span-2 space-y-6">
           <MiniCreatePost session={session} />
