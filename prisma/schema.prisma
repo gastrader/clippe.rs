@@ -35,23 +35,23 @@ model Session {
 }
 
 model User {
-  id                    String               @id @default(cuid())
-  username              String?              @unique
-  email                 String?              @unique
-  emailVerified         DateTime?
-  image                 String?
-  name                  String?
-  emailNotificationsEnabled Boolean? @default(true)
-  createdCommunities    Community[]          @relation("CreatedBy")
-  moderatingCommunities CommunityModerator[]
-  sessions              Session[]
-  posts                 Post[]
-  comments              Comment[]
-  commentVotes          CommentVote[]
-  votes                 Vote[]
-  subscriptions         Subscription[]
-  account               Account[]
-  feeds                 Feed[]
+  id                        String               @id @default(cuid())
+  username                  String?              @unique
+  email                     String?              @unique
+  emailVerified             DateTime?
+  image                     String?
+  name                      String?
+  emailNotificationsEnabled Boolean?             @default(true)
+  createdCommunities        Community[]          @relation("CreatedBy")
+  moderatingCommunities     CommunityModerator[]
+  sessions                  Session[]
+  posts                     Post[]
+  comments                  Comment[]
+  commentVotes              CommentVote[]
+  votes                     Vote[]
+  subscriptions             Subscription[]
+  account                   Account[]
+  feeds                     Feed[]
 }
 
 model Feed {
@@ -122,7 +122,7 @@ model Comment {
   postId    String
   authorId  String
   replyToId String?
-  post      Post          @relation(fields: [postId], references: [id])
+  post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
   author    User          @relation(fields: [authorId], references: [id])
   replyTo   Comment?      @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   replies   Comment[]     @relation("ReplyTo")

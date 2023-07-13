@@ -31,8 +31,8 @@ export const FeedLayout = ({}: FeedLayoutProps) => {
         <FeedsFeed view={view as ViewType} feed={feedId} initialPosts={[]} />
 
         {/* COMMUNITY INFO AND NEW COMPONENT*/}
-        <div className="order-first md:order-last">
-          <div className="overflow-hidden h-fit rounded-lg border border-gray-200">
+        <div className="order-first md:order-last ">
+          <div className="overflow-hidden h-fit rounded-lg border border-gray-200 mb-6">
             <div className="bg-cyan-100 px-6 py-4">
               <p className="font-semibold py-3 flex items-center gap-1.5">
                 <Boxes className="w-4 h-4"></Boxes> Custom Feed

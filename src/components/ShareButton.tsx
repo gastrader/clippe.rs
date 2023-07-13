@@ -11,6 +11,7 @@ interface ShareButtonProps {
 const ShareButton : React.FC<ShareButtonProps>= ({post_id, community_name}) => {
   const [copySuccess, setCopySuccess] = useState("");
 
+
   const handleCopy = async () => {
     try {
       const url = `clippe.rs/c/${community_name}/post/${post_id}`

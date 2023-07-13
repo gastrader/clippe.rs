@@ -11,7 +11,12 @@ import { Skeleton } from "./ui/Skeleton";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 type PartialVote = Pick<Vote, "type">;
 
 interface PostProps {
@@ -52,27 +57,28 @@ const Post: FC<PostProps> = ({
       console.error("Failed to copy", err);
     }
   };
+  const queryClient = useQueryClient();
   const { mutate: deletePost, isLoading } = useMutation({
     mutationFn: async () => {
-      const payload = {
-        post: post.id,
-      };
+      console.log("THE POST ID IS++++++", post.id);
+
       const res = await axios.delete(`/api/posts/delete/${post.id}`);
     },
-  onError:(err) => {
-     toast({
-       title: "There was an error.",
-       description: "Could not delete post.",
-       variant: "destructive",
-     });
-  },
-  onSuccess: (data) => {
-     toast({
-       title: "POST DELETED",
-       description: "This post was deleted.",
-       variant: "default",
-     });
-  }
+    onError: (err) => {
+      toast({
+        title: "There was an error.",
+        description: "Could not delete post.",
+        variant: "destructive",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      toast({
+        title: "POST DELETED",
+        description: "This post was deleted.",
+        variant: "default",
+      });
+    },
   });
 
   return (

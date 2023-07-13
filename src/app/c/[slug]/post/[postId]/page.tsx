@@ -1,3 +1,4 @@
+
 import CommentSection from "@/components/CommentSection";
 import CommentsSection from "@/components/CommentSection";
 import EditorOutput from "@/components/EditorOutput";
@@ -16,6 +17,8 @@ import { Suspense } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/Badge";
 import ShareButton from "@/components/ShareButton";
+import { useRouter } from "next/router";
+import DeleteButton from "@/components/DeleteButton";
 
 interface CommunityPostPageProps {
   params: {
@@ -41,11 +44,7 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
       include: {
         votes: true,
         author: true,
-        community: {
-          select:{
-            name: true
-          }
-        }
+        community: true,
       },
     });
   }
@@ -85,10 +84,15 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
                     {formatTimeToNow(
                       new Date(post?.createdAt ?? cachedPost.createdAt)
                     )}
-                  
                   </span>
-                  {/* @ts-ignore IDK WHY THIS IS ERRORING  */}
-                  <ShareButton community_name={post?.community.name ?? ""} post_id={post?.id}/>
+                  <div className="items-center flex">
+                    {/* @ts-ignore IDK WHY THIS IS ERRORING  */}
+                    <ShareButton
+                      community_name={post?.community.name ?? ""}
+                      post_id={post?.id || ""}
+                    />
+                    <DeleteButton postId={post?.id || ""} postAuthor={post?.author.id}/>
+                  </div>
                 </div>
                 <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
                   <div
@@ -129,11 +133,11 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
                   {post?.title}
                 </h1>
                 {(post?.tag?.toUpperCase() ?? cachedPost.tag.toUpperCase()) && (
-                  <p className="mb-2">
-                    <Badge variant="default">
+                  <div className="">
+                    <Badge variant="default" className="mb-2">
                       {post?.tag?.toUpperCase() ?? cachedPost.tag.toUpperCase()}
                     </Badge>
-                  </p>
+                  </div>
                 )}
                 <EditorOutput
                   content={post?.embedurl ?? cachedPost.embedurl}
