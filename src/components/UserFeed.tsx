@@ -11,6 +11,7 @@ import Post from "./Post";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "./ui/Skeleton";
 import { ViewType } from "../types";
+import { Badge } from "./ui/Badge";
 
 type UserFeedProps = {
   view: ViewType;
@@ -23,6 +24,7 @@ export const UserFeed = ({ view = "new" }: UserFeedProps) => {
     threshold: 1,
   });
   const { data: session } = useSession();
+
 
   const { data, fetchNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<ExtendedPost[]>(
