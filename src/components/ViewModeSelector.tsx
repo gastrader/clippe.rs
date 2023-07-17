@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "./ui/Tabs";
-import { ArrowUp10, Flame, Sparkles } from "lucide-react";
+import { Flame, Sparkles } from "lucide-react";
 
 export const ViewModeSelector = ({
   mode = "default",

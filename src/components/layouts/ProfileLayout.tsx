@@ -7,7 +7,7 @@ import Link from "next/link";
 import TopCommunities from "../TopCommunities";
 import { Session } from "next-auth";
 
-import {  useParams, useRouter } from "next/navigation";
+import {  useParams } from "next/navigation";
 import { UserAvatar } from "../UserAvatar";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
@@ -21,7 +21,7 @@ type ProfileLayoutProps = {
 
 export function ProfileLayout({ session, children }: ProfileLayoutProps) {
   const userId = useParams();
-  const router = useRouter();
+  
 
   const { data: data, isFetching } = useQuery({
     queryFn: async () => {
