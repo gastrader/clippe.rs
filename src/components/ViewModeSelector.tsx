@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "./ui/Tabs";
-import { ArrowUp10, Sparkles } from "lucide-react";
+import { ArrowUp10, Flame, Sparkles } from "lucide-react";
 
 export const ViewModeSelector = ({
   mode = "default",
@@ -10,7 +10,7 @@ export const ViewModeSelector = ({
   feedId,
 }: {
   mode?: "community" | "feed" | "default";
-  activeView?: "old" | "new";
+  activeView?: "top" | "new";
   feedId?: string
 }) => {
   const { slug } = useParams();
@@ -20,7 +20,7 @@ export const ViewModeSelector = ({
     if (mode === "community" && slug) {
       router.push(`/c/${slug}/${filter}`);
     } else if (mode === "feed") {
-      router.push(`/feed/${feedId}/${filter}`);
+      router.push(`/f/${feedId}/${filter}`);
     } else {
       router.push(`/${filter}`);
     }
@@ -33,9 +33,9 @@ export const ViewModeSelector = ({
           <Sparkles className="w-4 h-4 mr-2" />
           New
         </TabsTrigger>
-        <TabsTrigger onClick={() => handleTabClick("old")} value="old">
-          <ArrowUp10 className="w-4 h-4 mr-2" />
-          Old
+        <TabsTrigger onClick={() => handleTabClick("top")} value="top">
+          <Flame className="w-4 h-4 mr-2" />
+          Top
         </TabsTrigger>
       </TabsList>
     </Tabs>

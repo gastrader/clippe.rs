@@ -13,7 +13,7 @@ export async function GET(req: Request) {
         page: z.string(),
         // communityName: z.string().nullish().optional(),
         
-        filter: z.enum(["new", "old"]).optional(),
+        filter: z.enum(["new", "top"]).optional(),
         authorId: z.string().optional(),
       })
       .parse({
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
       orderBy = {
         createdAt: "desc",
       };
-    } else if (filter === "old") {
+    } else if (filter === "top") {
       orderBy = {
         createdAt: "asc",
       };

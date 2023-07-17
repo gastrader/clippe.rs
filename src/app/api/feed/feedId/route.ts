@@ -10,7 +10,7 @@ export async function GET(req: Request) {
       .object({
         limit: z.string(),
         page: z.string(),
-        filter: z.enum(["new", "old"]).optional(),
+        filter: z.enum(["new", "top"]).optional(),
         id: z.string(),
       })
       .parse({
@@ -40,7 +40,7 @@ export async function GET(req: Request) {
       orderBy = {
         createdAt: "desc",
       };
-    } else if (filter === "old") {
+    } else if (filter === "top") {
       orderBy = {
         createdAt: "asc",
       };

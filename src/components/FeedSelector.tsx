@@ -42,7 +42,7 @@ export const FeedSelector = () => {
           {feeds.length > 0 ? (
             <>
               {feeds.map((feed) => (
-                <Link href={`/feed/${feed.id}`} passHref key={feed.id}>
+                <Link href={`/f/${feed.id}`} passHref key={feed.id}>
                   <DropdownMenuItem className="cursor-pointer">
                     {feed.name}
                   </DropdownMenuItem>
@@ -57,7 +57,7 @@ export const FeedSelector = () => {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem>
-          <Link href="/feed/create" onClick={() => setOpen(false)}>
+          <Link href="/f/create" onClick={() => setOpen(false)}>
             <div className="flex gap-2 justify-center items-center">
               <PlusCircle size={16} />
               <span>New feed</span>

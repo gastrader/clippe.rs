@@ -14,7 +14,7 @@ export async function GET(req: Request) {
       .object({
         limit: z.string(),
         page: z.string(),
-        filter: z.enum(["new", "old"]).optional(),
+        filter: z.enum(["new", "top"]).optional(),
         
        
       })
@@ -31,15 +31,20 @@ export async function GET(req: Request) {
       orderBy = {
         createdAt: "desc",
       };
-    } else if (filter === "old") {
-      orderBy = {
-        createdAt: "asc",
-      };
+    } else if (filter === "top") {
+      orderBy = [
+        {
+          score: "desc",
+        },
+        {
+          createdAt: "desc",
+        },]
     }
+
 
     let posts;
 
-    if (session) {
+    if (session && filter === "new") {
       const subscribedCommunities = await db.subscription.findMany({
         where: {
           userId: session.user.id,
@@ -62,7 +67,36 @@ export async function GET(req: Request) {
           },
         },
       });
-    } else if (!session) {
+    } else if (session && filter === "top") {
+      const subscribedCommunities = await db.subscription.findMany({
+        where: {
+          userId: session.user.id,
+        },
+      });
+      const yesterday = new Date();
+      yesterday.setHours(yesterday.getHours() - 24);
+
+      posts = await db.post.findMany({
+        take: parseInt(limit),
+        skip: (parseInt(page) - 1) * parseInt(limit),
+        orderBy,
+        include: {
+          community: true,
+          votes: true,
+          author: true,
+          comments: true,
+        },
+        where: {
+          createdAt: {
+            gte: yesterday
+          },
+          communityId: {
+            in: subscribedCommunities.map((sc) => sc.communityId) || [],
+          },
+        },
+      });
+    }
+    else if (!session && filter === "new") {
       posts = await db.post.findMany({
         orderBy,
         take: parseInt(limit),
@@ -74,6 +108,24 @@ export async function GET(req: Request) {
           community: true,
         },
       });
+    } else if (!session && filter === "top") {
+      const yesterday = new Date();
+      yesterday.setHours(yesterday.getHours() - 24);
+       posts = await db.post.findMany({
+         orderBy,
+         take: parseInt(limit),
+         skip: (parseInt(page) - 1) * parseInt(limit),
+         include: {
+           votes: true,
+           author: true,
+           comments: true,
+           community: true,
+         },
+         where:{
+          createdAt: {
+            gte: yesterday
+          },
+       },});
     }
 
     return new Response(JSON.stringify(posts));

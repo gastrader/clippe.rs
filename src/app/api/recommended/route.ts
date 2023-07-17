@@ -4,20 +4,25 @@ import { z } from "zod";
 export async function GET(req: Request) {
   const url = new URL(req.url);
 
+  const yesterday = new Date()
+  yesterday.setHours(yesterday.getHours()-24)
   try {
 
     const posts = await db.post.findMany({
       take: 3,
-      orderBy: [{
-        votes: {
-            _count: "desc"
-        }
-    
-      },
-     {
+      orderBy: [
+        {
+          score: "desc",
+        },
+        {
           createdAt: "desc",
         },
-    ],
+      ],
+      where: {
+        createdAt: {
+          gte: yesterday,
+        },
+      },
       include: {
         community: true,
         votes: true,

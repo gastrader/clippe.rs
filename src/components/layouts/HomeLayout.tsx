@@ -21,7 +21,7 @@ export function HomeLayout({ session, children }: HomeLayoutProps) {
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">General feed</h1>
       <div className="space-x-2 flex flex-row">
-        <ViewModeSelector activeView={view as "new" | "old" | undefined} />
+        <ViewModeSelector activeView={view as "new" | "top" | undefined} />
         <FeedSelector />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-x-4 py-6">
@@ -55,7 +55,7 @@ export function HomeLayout({ session, children }: HomeLayoutProps) {
                   className={buttonVariants({
                     className: "w-full mt-4 mb-6",
                   })}
-                  href="/feed/create"
+                  href="/f/create"
                 >
                   Create Custom Feed
                 </Link>

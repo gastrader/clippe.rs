@@ -102,7 +102,7 @@ const CommunityPostPage = async ({ params }: CommunityPostPageProps) => {
                 </div>
                 <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
                   <div
-                    className={`shadow border border-gray-300 h-[30px] text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 text-white ${
+                    className={`shadow border border-gray-300 h-[30px] text-xs font-normal flex flex-shrink-0 justify-center items-center gap-2 rounded-xl px-2 text-white ${
                       post?.sitename === "Twitch"
                         ? "bg-purple-500"
                         : post?.sitename === "YouTube"

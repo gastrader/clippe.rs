@@ -72,7 +72,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
   });
 
   return (
-    <div className="flex sm:flex items-center gap-4 sm:gap-0 pr-6 sm:w-20 pb-4 sm:pb-0">
+    <div className="flex sm:flex items-center align-middle gap-4 sm:gap-0 pr-6 sm:w-24 pb-4 sm:pb-0 gap-x-2">
       <Button
         onClick={() => vote("UP")}
         size="sm"
@@ -80,12 +80,12 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         aria-label="upvote"
       >
         <ArrowBigUp
-          className={cn("h-5 w-5 text-zinc-700", {
+          className={cn("h-5 w-5 text-zinc-700 ", {
             "text-emerald-500 fill-emerald-500": currentVote === "UP",
           })}
         />
       </Button>
-      <p className="text-center py-2 font-medium text-sm text-zinc-900">
+      <p className="text-center py-2 font-medium text-sm text-zinc-900 mx-1">
         {votesAmt}
       </p>
       <Button

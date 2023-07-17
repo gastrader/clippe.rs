@@ -91,6 +91,7 @@ export const UserFeed = ({ view = "new" }: UserFeedProps) => {
                       communityName={post.community.name}
                       votesAmt={votesAmt}
                       currentVote={currentVote}
+                    
                     />
                   </li>
                 );

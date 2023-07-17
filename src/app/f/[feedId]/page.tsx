@@ -28,7 +28,7 @@ const Page = async ({ params }: PageProps) => {
   return (
     <>
       <h1 className="font-bold text-3xl md:text-4xl h-14">
-        feed/{feed.name}
+        f/{feed.name}
       </h1>
       {/* @ts-expect-error server component */}
       <FeedLayout >

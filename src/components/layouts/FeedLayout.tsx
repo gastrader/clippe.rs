@@ -58,7 +58,7 @@ export const FeedLayout = ({}: FeedLayoutProps) => {
                 className={buttonVariants({
                   className: "w-full mt-4 mb-6",
                 })}
-                href="/feed/create"
+                href="/f/create"
               >
                 Create Custom Feed
               </Link>

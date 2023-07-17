@@ -113,6 +113,7 @@ model Post {
   author      User      @relation(fields: [authorId], references: [id])
   comments    Comment[]
   votes       Vote[]
+  score       Int       @default(0)
 }
 
 model Comment {

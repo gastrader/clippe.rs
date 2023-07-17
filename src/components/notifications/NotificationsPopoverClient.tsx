@@ -67,7 +67,8 @@ export const NotificationsPopover = ({
                   href={`/c/${notif.payload.communityName}/post/${notif.payload.postId}#${notif.payload.commentReplyId}`}
                 >
                   <div className="flex flex-col space-y-1 leading-none">
-                    New reply to your comment in {notif.payload.communityName}
+                    New reply to your comment in &apos; c/
+                    {notif.payload.communityName}&apos;
                   </div>
                 </Link>
               )}

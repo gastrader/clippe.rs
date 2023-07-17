@@ -40,7 +40,7 @@ export const SmallPost = () => {
       <ul className="flex flex-col col-span-2 space-y-6 pt-2">
         {isLoading
           ? [1, 2, 3].map((n) => (
-              <Skeleton className="w-full h-[50px] rounded-xl" key={n} />
+              <Skeleton className="w-full h-[75px] rounded-xl" key={n} />
             ))
           : posts.map((post, index) => {
               const votesAmt = post.votes.reduce(

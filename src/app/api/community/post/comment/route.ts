@@ -26,6 +26,16 @@ export async function PATCH(req: Request) {
         replyToId,
       },
     });
+    await db.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        score: {
+          increment: 15,
+        },
+      },
+    });
 
     if (replyToId) {
       const parentCommentAuthor = await db.comment.findUnique({

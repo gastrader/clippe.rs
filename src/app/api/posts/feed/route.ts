@@ -11,7 +11,7 @@ export async function GET(req: Request) {
         limit: z.string(),
         page: z.string(),
         feed: z.string().optional(),
-        filter: z.enum(["new", "old"]).optional(),
+        filter: z.enum(["new", "top"]).optional(),
       })
       .parse({
         limit: url.searchParams.get("limit"),
@@ -21,17 +21,38 @@ export async function GET(req: Request) {
       });
 
     let orderBy = {};
+    let where = {}
 
     if (filter === "new") {
       orderBy = {
         createdAt: "desc",
       };
-    } else if (filter === "old") {
-      orderBy = {
-        createdAt: "asc",
-      };
-    }
-    const feedData = await db.feed.findUnique({
+       const feedData = await db.feed.findUnique({
+         where: {
+           id: feed,
+         },
+         include: {
+           communities: true, // Include the communities that are part of the feed
+         },
+       });
+       const communityIds = feedData?.communities.map(
+         (community) => community.id
+       );
+       where = {
+         communityId: {
+           in: communityIds,
+         },
+       };
+    } else if (filter === "top") {
+      orderBy = [
+          {
+            score: "desc",
+          },
+          {
+            createdAt: "desc",
+          },
+        ]
+        const feedData = await db.feed.findUnique({
       where: {
         id: feed,
       },
@@ -39,7 +60,28 @@ export async function GET(req: Request) {
         communities: true, // Include the communities that are part of the feed
       },
     });
+    const yesterday = new Date();
+    yesterday.setHours(yesterday.getHours() - 24);
     const communityIds = feedData?.communities.map((community) => community.id);
+        where = {
+          communityId: {
+            in: communityIds,
+          },
+          createdAt: {
+            gte: yesterday,
+          },
+        };
+    }
+    
+    // const feedData = await db.feed.findUnique({
+    //   where: {
+    //     id: feed,
+    //   },
+    //   include: {
+    //     communities: true, // Include the communities that are part of the feed
+    //   },
+    // });
+    // const communityIds = feedData?.communities.map((community) => community.id);
 
     const posts = await db.post.findMany({
       take: parseInt(limit),
@@ -51,11 +93,7 @@ export async function GET(req: Request) {
         author: true,
         comments: true,
       },
-      where: {
-        communityId: {
-          in: communityIds,
-        },
-      },
+     where,
     });
 
     return new Response(JSON.stringify(posts));
