@@ -64,10 +64,13 @@ export async function POST(req: Request) {
       const siteName = "Twitch";
 
       const urlRegex =
-        /<meta property="og:video:secure_url" content="(.*?)"|<meta property="og:video" content="(.*?)"/;
+        /<meta property="og:video:secure_url" content="(.*?)"/;
+      // /<meta property="og:video:secure_url" content="(.*?)"|<meta property="og:video" content="(.*?)"/;
       const urlMatch = pageData.match(urlRegex);
+
       const embededUrl2 = urlMatch ? urlMatch[1] : null;
       const embededUrl = embededUrl2.replace(/&amp;/, "&");
+    
 
       const channelRegex = /<meta property="og:title" content="(.*?) -/;
       const channelMatch = pageData.match(channelRegex);
@@ -92,7 +95,7 @@ export async function POST(req: Request) {
       const urlMatch = pageData.match(urlRegex);
       const embededUrl2 = urlMatch ? urlMatch[1] : null;
       const embededUrl = embededUrl2.replace(/&amp;/g, "&");
-      const siteName = "Youtube";
+      const siteName = "YouTube";
 
       const channelRegex = /<link itemprop="name" content="(.*?)"/;
       const channelMatch = pageData.match(channelRegex);

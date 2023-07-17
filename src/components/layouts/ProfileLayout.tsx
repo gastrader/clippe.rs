@@ -7,7 +7,7 @@ import Link from "next/link";
 import TopCommunities from "../TopCommunities";
 import { Session } from "next-auth";
 
-import {  useParams } from "next/navigation";
+import {  useParams, useRouter } from "next/navigation";
 import { UserAvatar } from "../UserAvatar";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
@@ -21,12 +21,9 @@ type ProfileLayoutProps = {
 
 export function ProfileLayout({ session, children }: ProfileLayoutProps) {
   const userId = useParams();
+  const router = useRouter();
 
-  const {
-    data: data,
-    isFetching,
-    
-  } = useQuery({
+  const { data: data, isFetching } = useQuery({
     queryFn: async () => {
       const res = await axios.get(`../api/profile/query?q=${userId.userId}`);
       return res.data;
@@ -34,6 +31,13 @@ export function ProfileLayout({ session, children }: ProfileLayoutProps) {
     queryKey: ["search-query", "userId"],
     enabled: true,
   });
+
+
+// THIS IS NOT WORKING
+  if (!data && !isFetching) {
+    router.push("/404");
+    return null;
+  }
 
   return (
     <>

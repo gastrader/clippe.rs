@@ -49,7 +49,8 @@ export const ProfileFeed = ({ view = "new" }: UserFeedProps) => {
         initialData: { pages: [], pageParams: [1] },
         staleTime: 0,
         cacheTime: 0,
-      }
+      },
+      
     );
 
 

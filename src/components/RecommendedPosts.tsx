@@ -1,7 +1,7 @@
 import { ListStart } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "./ui/Button";
-import SmallPost from "./SmallPost";
+import {SmallPost} from "./SmallPost";
 
 const RecommendedPosts = async () => {
 
@@ -18,22 +18,11 @@ const RecommendedPosts = async () => {
               Here are some of the top clips we recommend for you!
             </p>
           </div>
-          <div className="space-y-3">
-            {/* @ts-expect-error */}
+          <div className="space-y-3 pb-4">
             <SmallPost />
-            {/* @ts-expect-error */}
-            <SmallPost />
-            {/* @ts-expect-error*/}
-            <SmallPost />
+
           </div>
-          <Link
-            className={buttonVariants({
-              className: "w-full mt-4 mb-6",
-            })}
-            href="/"
-          >
-            Back Home
-          </Link>
+          
         </div>
       </div>
     );

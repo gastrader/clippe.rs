@@ -116,7 +116,7 @@ const Post: FC<PostProps> = ({
           </div>
 
           <a href={`/c/${communityName}/post/${post.id}`}>
-            <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
+            <h1 className=" h-[40px] text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
               <div
                 className={`shadow border border-gray-300 text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 text-white ${
                   post.sitename === "Twitch"
@@ -147,7 +147,9 @@ const Post: FC<PostProps> = ({
                 ) : null}
                 {post.channel}
               </div>
-              {post.title}
+              <div className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+                {post.title}
+              </div>
             </h1>
 
             {post.tag && (
