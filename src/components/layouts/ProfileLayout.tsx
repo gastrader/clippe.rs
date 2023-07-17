@@ -34,10 +34,10 @@ export function ProfileLayout({ session, children }: ProfileLayoutProps) {
 
 
 // THIS IS NOT WORKING
-  if (!data && !isFetching) {
-    router.push("/404");
-    return null;
-  }
+  // if (!data && !isFetching) {
+  //   router.push("/404");
+  //   return null;
+  // }
 
   return (
     <>
