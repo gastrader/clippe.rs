@@ -19,10 +19,10 @@ const TopCommunities = () => {
     
     return data;
   },
-    {
-        staleTime: 1000,
-        refetchOnWindowFocus: false,
-    }
+    // {
+    //     staleTime: 0,
+    //     refetchOnWindowFocus: false,
+    // }
   ) ;
 
   if (isLoading) return (
