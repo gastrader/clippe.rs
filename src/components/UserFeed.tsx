@@ -26,7 +26,7 @@ export const UserFeed = ({ view = "new" }: UserFeedProps) => {
   const { data: session } = useSession();
 
 
-  const { data, fetchNextPage, isFetchingNextPage, isLoading } =
+  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetched } =
     useInfiniteQuery<ExtendedPost[]>(
       ["infinite-query", view],
       async ({ pageParam = 1 }) => {
@@ -60,11 +60,12 @@ export const UserFeed = ({ view = "new" }: UserFeedProps) => {
   return (
     <div className="flex flex-col col-span-2 space-y-6">
       <ul className="flex flex-col col-span-2 space-y-6">
-        {isLoading 
+        {isLoading || !isFetched
           ? [1, 2].map((n) => (
               <Skeleton className="w-full h-[600px] rounded-xl" key={n} />
             ))
-          : posts.map((post, index) => {
+          : posts.length > 0 ?
+          posts.map((post, index) => {
               const votesAmt = post.votes.reduce(
                 (acc: number, vote: { type: string }) => {
                   if (vote.type === "UP") return acc + 1;
@@ -108,7 +109,9 @@ export const UserFeed = ({ view = "new" }: UserFeedProps) => {
                   />
                 );
               }
-            })}
+            }
+            ) : <span className="font-semibold">No Posts Found! Please subscribe to new communities to display posts here.</span>
+          }
 
         {isFetchingNextPage && (
           <li className="flex justify-center">

@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 type PartialVote = Pick<Vote, "type">;
 
 interface ProfilePostProps {
@@ -49,6 +49,7 @@ const ProfilePost: FC<ProfilePostProps> = ({
       console.error("Failed to copy", err);
     }
   };
+  const queryClient = useQueryClient();
   const { mutate: deletePost, isLoading } = useMutation({
     mutationFn: async () => {
       const payload = {
@@ -64,6 +65,7 @@ const ProfilePost: FC<ProfilePostProps> = ({
       });
     },
     onSuccess: () => {
+      queryClient.invalidateQueries();
       toast({
         title: "POST DELETED",
         description: "This post was deleted.",
@@ -111,9 +113,9 @@ const ProfilePost: FC<ProfilePostProps> = ({
           </div>
 
           <a href={`/c/${communityName}/post/${post.id}`}>
-            <h1 className="text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
+            <h1 className=" h-[40px] text-lg font-semibold leading-6 py-2 text-gray-900 flex flex-grow gap-x-2">
               <div
-                className={`shadow border border-gray-300 text-xs font-normal flex justify-center items-center gap-2 rounded-xl px-2 text-white ${
+                className={`shadow border border-gray-300 text-xs font-normal flex flex-shrink-0 justify-center items-center gap-2 rounded-xl px-2 text-white ${
                   post.sitename === "Twitch"
                     ? "bg-purple-500"
                     : post.sitename === "YouTube"

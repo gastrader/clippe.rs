@@ -28,31 +28,40 @@ export const ProfileFeed = ({ view = "new" }: UserFeedProps) => {
   const { data: session } = useSession();
   const params = useParams();
 
-  const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching, error, isFetched } =
-    useInfiniteQuery<ExtendedPost[]>(
-      ["infinite-query", view],
-      async ({ pageParam = 1 }) => {
-        const { data } = await axios.get("/api/profile", {
-          params: {
-            limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
-            page: pageParam,
-            filter: view, // new, old, top...
-            authorId: params.userId,
-          },
-        });
-        return data as ExtendedPost[];
-      },
-      {
-        getNextPageParam: (_, pages) => {
-          return pages.length + 1;
+  const {
+    data,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isFetching,
+    error,
+    isFetched,
+    isError
+  } = useInfiniteQuery<ExtendedPost[]>(
+    ["infinite-query", view],
+    async ({ pageParam = 1 }) => {
+      const { data } = await axios.get("/api/profile", {
+        params: {
+          limit: INFINITE_SCROLLING_PAGINATION_RESULTS,
+          page: pageParam,
+          filter: view, // new, old, top...
+          authorId: params.userId,
         },
-        initialData: { pages: [], pageParams: [1] },
-        staleTime: 0,
-        cacheTime: 0,
-      },
       
-    );
-
+      });
+      return data as ExtendedPost[];
+      
+    },
+    
+    {
+      getNextPageParam: (_, pages) => {
+        return pages.length + 1;
+      },
+      initialData: { pages: [], pageParams: [1] },
+      staleTime: 0,
+      cacheTime: 0,
+    }
+  );
 
   useEffect(() => {
     if (entry?.isIntersecting) {
@@ -62,44 +71,35 @@ export const ProfileFeed = ({ view = "new" }: UserFeedProps) => {
 
   const posts = data?.pages.flatMap((page) => page) || [];
 
+
+
   return (
     <div className="flex flex-col col-span-2 space-y-6">
       <ul className="flex flex-col col-span-2 space-y-6">
-        {isLoading 
-          ? [1, 2, 3, 4, 5, 6].map((n) => (
-              <Skeleton className="w-full h-[200px] rounded-xl" key={n} />
-            ))
-          : posts.map((post, index) => {
-              const votesAmt = post.votes.reduce(
-                (acc: number, vote: { type: string }) => {
-                  if (vote.type === "UP") return acc + 1;
-                  if (vote.type === "DOWN") return acc - 1;
-                  return acc;
-                },
-                0
-              );
+        {isLoading || !isFetched ? (
+          [1, 2, 3, 4, 5, 6].map((n) => (
+            <Skeleton className="w-full h-[200px] rounded-xl" key={n} />
+          ))
+        ) : (posts.length > 0 && !isLoading) ? (
+          posts.map((post, index) => {
+            const votesAmt = post.votes.reduce(
+              (acc: number, vote: { type: string }) => {
+                if (vote.type === "UP") return acc + 1;
+                if (vote.type === "DOWN") return acc - 1;
+                return acc;
+              },
+              0
+            );
 
-              const currentVote = post.votes.find(
-                (vote: { userId: string | undefined }) =>
-                  vote.userId === session?.user.id
-              );
+            const currentVote = post.votes.find(
+              (vote: { userId: string | undefined }) =>
+                vote.userId === session?.user.id
+            );
 
-              if (index === posts.length - 1) {
-                // Add a ref to the last post in the list
-                return (
-                  <li key={post.id} ref={ref}>
-                    <ProfilePost
-                      key={post.id}
-                      post={post}
-                      commentAmt={post.comments.length}
-                      communityName={post.community.name}
-                      votesAmt={votesAmt}
-                      currentVote={currentVote}
-                    />
-                  </li>
-                );
-              } else {
-                return (
+            if (index === posts.length - 1) {
+              // Add a ref to the last post in the list
+              return (
+                <li key={post.id} ref={ref}>
                   <ProfilePost
                     key={post.id}
                     post={post}
@@ -108,9 +108,26 @@ export const ProfileFeed = ({ view = "new" }: UserFeedProps) => {
                     votesAmt={votesAmt}
                     currentVote={currentVote}
                   />
-                );
-              }
-            })}
+                </li>
+              );
+            } else {
+              return (
+                <ProfilePost
+                  key={post.id}
+                  post={post}
+                  commentAmt={post.comments.length}
+                  communityName={post.community.name}
+                  votesAmt={votesAmt}
+                  currentVote={currentVote}
+                />
+              );
+            }
+          })
+        ) : (
+          <span className="font-semibold">
+            No Posts Found From This User.
+          </span>
+        )}
 
         {isFetchingNextPage && (
           <li className="flex justify-center">
