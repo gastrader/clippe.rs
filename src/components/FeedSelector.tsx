@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { type Feed } from "@prisma/client";
 import {
   DropdownMenu,
@@ -12,11 +12,16 @@ import {
   DropdownMenuTrigger,
 } from "./ui/DropdownMenu";
 import Link from "next/link";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Trash2Icon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/Button";
+import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
+import { Skeleton } from "./ui/Skeleton";
 
 export const FeedSelector = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const { data: feeds = [], isLoading } = useQuery<Feed[]>({
     queryKey: ["feeds"],
@@ -25,6 +30,31 @@ export const FeedSelector = () => {
       return res.data;
     },
   });
+  const deleteFeedMutation = useMutation(
+    (feedId) => axios.delete(`/api/feed/delete/${feedId}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        router.refresh();
+        toast({
+          title: "FEED DELETED",
+          description: "The feed was deleted.",
+          variant: "default",
+        });
+      },
+      onError: () => {
+        toast({
+          title: "There was an error.",
+          description: "Could not delete feed.",
+          variant: "destructive",
+        });
+      },
+    }
+  );
+
+  const handleDeleteFeed = (feedId: string) => {
+    deleteFeedMutation.mutate(feedId as any);
+  };
 
   return (
     <DropdownMenu open={open}>
@@ -37,20 +67,38 @@ export const FeedSelector = () => {
       <DropdownMenuContent onInteractOutside={() => setOpen(false)}>
         <DropdownMenuLabel>Available feeds</DropdownMenuLabel>
         <DropdownMenuSeparator />
-
         <div style={{ maxHeight: "200px", overflowY: "auto" }}>
-          {feeds.length > 0 ? (
-            <>
-              {feeds.map((feed) => (
-                <Link href={`/f/${feed.id}`} passHref key={feed.id}>
-                  <DropdownMenuItem className="cursor-pointer">
-                    {feed.name}
-                  </DropdownMenuItem>
-                </Link>
-              ))}
-            </>
+          {isLoading ? (
+            <Skeleton className="w-[166px] h-[32px]"/>
           ) : (
-            <span>You don&apos;t have any feeds yet 👻</span>
+            <>
+              {feeds.length > 0 ? (
+                <>
+                  {feeds.map((feed) => (
+                    <div
+                      key={feed.id}
+                      className="flex items-center justify-between"
+                    >
+                      <Link href={`/f/${feed.id}`} passHref>
+                        <DropdownMenuItem className="cursor-pointer w-[150px] overflow-hidden whitespace-nowrap overflow-ellipsis">
+                          <span className="truncate tracking-tight">
+                            {feed.name}
+                          </span>
+                        </DropdownMenuItem>
+                      </Link>
+                      <Trash2Icon
+                        className="h-4 w-4 hover:text-red-500 rounded-lg hover:cursor-pointer"
+                        onClick={() => handleDeleteFeed(feed.id)}
+                      />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <span className="tracking-tight px-2">
+                  Create a custom feed 👻
+                </span>
+              )}
+            </>
           )}
         </div>
 

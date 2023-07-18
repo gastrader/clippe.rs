@@ -27,8 +27,8 @@ interface PostProps {
   url: string;
 }
 
-// const IFRAME_PARENT = "&parent=localhost&parent=clippe.rs";
-const IFRAME_PARENT = "&parent=www.clippe.rs";
+const IFRAME_PARENT = "&parent=localhost&parent=www.clippe.rs";
+// const IFRAME_PARENT = "&parent=www.clippe.rs";
 
 const Post: FC<PostProps> = ({
   communityName,
