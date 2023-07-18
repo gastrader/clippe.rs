@@ -8,8 +8,8 @@ interface EditorOutputProps {
   content: any;
   sitename: string;
 }
-
-const IFRAME_PARENT = "&parent=localhost&parent=clippe.rs";
+// const IFRAME_PARENT = "&parent=localhost&parent=https://www.clippe.rs";
+const IFRAME_PARENT = "parent=https://www.clippe.rs";
 
 const EditorOutput: FC<EditorOutputProps> = ({ content, sitename }) => {
   if (sitename === "Kick") {
