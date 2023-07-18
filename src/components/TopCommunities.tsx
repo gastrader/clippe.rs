@@ -20,7 +20,7 @@ const TopCommunities = () => {
     return data;
   },
     {
-        staleTime: 1000*60*60,
+        staleTime: 1000,
         refetchOnWindowFocus: false,
     }
   ) ;
@@ -38,9 +38,9 @@ const TopCommunities = () => {
           Enjoy the largest communities we have to offer.
         </p>
         <Separator orientation="horizontal" className="my-2" />
-        <Skeleton className="h-[20px] w-[150px] rounded-lg" />
-        <Skeleton className="h-[24px] w-[150px] rounded-sm" />
-        <Skeleton className="h-[24px] w-[150px] rounded-sm" />
+        <Skeleton className="h-[24px] w-[150px] rounded-lg" />
+        <Skeleton className="h-[24px] w-[150px] rounded-lg" />
+        <Skeleton className="h-[24px] w-[150px] rounded-lg" />
       </div>
     </div>
   </div>)

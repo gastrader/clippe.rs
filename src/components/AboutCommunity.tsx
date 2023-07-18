@@ -59,7 +59,7 @@ const AboutCommunity = ({
             variant: "outline",
             className: "w-full mb-6",
           })}
-          href={`c/${community.name}/submit`}
+          href={`/c/${community.name}/submit`}
         >
           Create Post
         </Link>
