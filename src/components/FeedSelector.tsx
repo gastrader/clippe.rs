@@ -54,6 +54,7 @@ export const FeedSelector = () => {
 
   const handleDeleteFeed = (feedId: string) => {
     deleteFeedMutation.mutate(feedId as any);
+    router.replace('/')
   };
 
   return (

@@ -8,7 +8,7 @@ import { FeedValidatorPayload } from "@/lib/validators/feed";
 import axios, { AxiosError } from "axios";
 import { toast } from "@/hooks/use-toast";
 import { useCustomToast } from "@/hooks/use-custom-toast";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -29,6 +29,8 @@ type FeedCreateForm = {
 
 const FeedCreate = () => {
   const router = useRouter();
+  const path = usePathname();
+
   const form = useForm<FeedCreateForm>({
     defaultValues: {
       feedName: "",
@@ -79,6 +81,7 @@ const queryClient = useQueryClient();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries();
+      form.reset()
        setIsModalOpen(false); // Close the modal
        router.push(`/f/${data}`);
       
@@ -100,10 +103,10 @@ const queryClient = useQueryClient();
 
   return (
     <>
-      {isModalOpen && (
+      {(path === "/f/create") && (
         <div className="fixed inset-0 bg-zinc-900/20 z-10 flex items-center justify-center">
           <div className="container max-w-lg mx-auto">
-            <div className="relative bg-white w-full py-20 px-2 rounded-lg">
+            <div className="relative bg-white w-full py-20 px-8 rounded-lg">
               <div className="absolute top-4 right-4">
                 <CloseModal />
               </div>
