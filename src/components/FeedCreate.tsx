@@ -19,6 +19,8 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/Form";
+import { useState } from "react";
+import CloseModal from "./CloseModal";
 
 type FeedCreateForm = {
   feedName: string;
@@ -35,6 +37,7 @@ const FeedCreate = () => {
   });
 
   const { loginToast } = useCustomToast();
+  const [isModalOpen, setIsModalOpen] = useState(true);
 const queryClient = useQueryClient();
   const { mutateAsync: createFeed, isLoading } = useMutation({
     mutationFn: async (formData: FeedCreateForm) => {
@@ -76,7 +79,9 @@ const queryClient = useQueryClient();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries();
-      router.back();
+       setIsModalOpen(false); // Close the modal
+       router.push(`/f/${data}`);
+      
       toast({
         title: "Success!",
         description: "Your feed has been created",
@@ -94,77 +99,49 @@ const queryClient = useQueryClient();
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
-      >
-        <FormField
-          control={form.control}
-          name="feedName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Feed name</FormLabel>
-              <FormControl>
-                <Input placeholder="My favourites" {...field} />
-              </FormControl>
-              <FormDescription>
-                Something that describes the included communities.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FeedCreateSearchBar />
-        <Button type="submit" isLoading={isLoading}>
-          Create feed
-        </Button>
-      </form>
-    </Form>
+    <>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-zinc-900/20 z-10 flex items-center justify-center">
+          <div className="container max-w-lg mx-auto">
+            <div className="relative bg-white w-full py-20 px-2 rounded-lg">
+              <div className="absolute top-4 right-4">
+                <CloseModal />
+              </div>
+
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="flex flex-col gap-4"
+                >
+                  <FormField
+                    control={form.control}
+                    name="feedName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Feed name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="My favourites" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          Something that describes the included communities.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FeedCreateSearchBar />
+                  <Button type="submit" isLoading={isLoading}>
+                    Create feed
+                  </Button>
+                </form>
+              </Form>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
-// <Card className="w-[350px]">
-//   <Icons.logo className="mx-auto h-6 w-6 mt-4" />
-//   <CardHeader className="mx-auto">
-//     <CardTitle>Create a custom feed.</CardTitle>
-//     <CardDescription>
-//       Add any communities you are subscribed with to your custom feed.
-//     </CardDescription>
-//   </CardHeader>
-//   <CardContent>
-//     <form id="create-feed-form" onSubmit={handleSubmit}>
-//       <div className="grid w-full items-center gap-4">
-//         <div className="flex flex-col space-y-1.5">
-//           <Label htmlFor="name">Feed</Label>
-//           <Input
-//             id="name"
-//             placeholder="Name of your feed"
-//             value={feedName}
-//             onChange={(e) => setFeedName(e.target.value)}
-//           />
-//         </div>
-//         <div className="flex flex-col space-y-1.5">
-//           <Label htmlFor="name">Find Communities</Label>
-//           {/* @ts-ignore */}
-//           <FeedCreateSearchBar
-//             setSelectedCommunities={setSelectedCommunities}
-//             selectedCommunities={selectedCommunities}
-//           />
-//         </div>
-//       </div>
-//     </form>
-//     <Button
-//       isLoading={isLoading}
-//       type="submit"
-//       className="w-full mt-6"
-//       form="create-feed-form"
-//       variant={"outline"}
-//       onClick={() => createFeed()}
-//     >
-//       Create a new feed
-//     </Button>
-//   </CardContent>
-// </Card>;
 
 export default FeedCreate;
