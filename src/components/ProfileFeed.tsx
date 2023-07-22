@@ -7,12 +7,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef } from "react";
-import Post from "./Post";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "./ui/Skeleton";
 import { ViewType } from "../types";
-import { useRouter } from "next/router";
-import { notFound, useParams } from "next/navigation";
+
+import { useParams } from "next/navigation";
 import ProfilePost from "./ProfilePost";
 
 type UserFeedProps = {
@@ -33,10 +32,7 @@ export const ProfileFeed = ({ view = "new" }: UserFeedProps) => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching,
-    error,
     isFetched,
-    isError
   } = useInfiniteQuery<ExtendedPost[]>(
     ["infinite-query", view],
     async ({ pageParam = 1 }) => {

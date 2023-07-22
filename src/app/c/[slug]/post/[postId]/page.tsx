@@ -17,7 +17,7 @@ import { Suspense } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/Badge";
 import ShareButton from "@/components/ShareButton";
-import { useRouter } from "next/router";
+
 import DeleteButton from "@/components/DeleteButton";
 
 interface CommunityPostPageProps {

@@ -117,7 +117,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, communityName, view }) => {
         })
       ) : (
         <span className="font-semibold">
-          No Recent Posts Found! Feel free to discover other communities.
+          No Posts Found! Feel free to discover other communities.
         </span>
       )}
 
