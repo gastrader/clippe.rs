@@ -17,44 +17,44 @@ const Layout = async ({
   children: ReactNode;
   params: { slug: string };
 }) => {
-  const session = await getAuthSession();
+  // const session = await getAuthSession();
 
-  const community = await db.community.findFirst({
-    where: { name: slug },
-    include: {
-      posts: {
-        include: {
-          author: true,
-          votes: true,
-        },
-      },
-    },
-  });
+  // const community = await db.community.findFirst({
+  //   where: { name: slug },
+  //   include: {
+  //     posts: {
+  //       include: {
+  //         author: true,
+  //         votes: true,
+  //       },
+  //     },
+  //   },
+  // });
 
-  const subscription = !session?.user
-    ? undefined
-    : await db.subscription.findFirst({
-        where: {
-          community: {
-            name: slug,
-          },
-          user: {
-            id: session.user.id,
-          },
-        },
-      });
+  // const subscription = !session?.user
+  //   ? undefined
+  //   : await db.subscription.findFirst({
+  //       where: {
+  //         community: {
+  //           name: slug,
+  //         },
+  //         user: {
+  //           id: session.user.id,
+  //         },
+  //       },
+  //     });
 
-  const isSubscribed = !!subscription;
+  // const isSubscribed = !!subscription;
 
-  if (!community) return notFound();
+ 
 
-  const memberCount = await db.subscription.count({
-    where: {
-      community: {
-        name: slug,
-      },
-    },
-  });
+  // const memberCount = await db.subscription.count({
+  //   where: {
+  //     community: {
+  //       name: slug,
+  //     },
+  //   },
+  // });
 
   return (
     <div>{children}</div>
