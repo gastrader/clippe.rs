@@ -1,6 +1,6 @@
 import { formatTimeToNow } from "@/lib/utils";
 import { Post, User, Vote } from "@prisma/client";
-import { Link as LinkIcon, Link2, MessageSquare, Trash } from "lucide-react";
+import { Link as LinkIcon, Link2, MessageSquare, Trash, ExternalLink } from "lucide-react";
 import React, { FC, useRef, useState } from "react";
 import Link from "next/link";
 import PostVoteClient from "./post-vote/PostVoteClient";
@@ -172,7 +172,24 @@ const Post: FC<PostProps> = ({
                   className="underline flex items-center text-sm text-blue-800"
                 >
                   {post.embedurl || "Unavailable"}{" "}
-                  <Link2 className="ml-1 h-4 w-4" />
+                  <ExternalLink className="ml-1 h-4 w-4" />
+                </a>
+              </div>
+            ) : post.tag === "nsfw" ? (
+              <div
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(110,101,101,1) 0%, rgba(3,1,1,1) 95%)",
+                }}
+                className="h-[500px] w-full flex items-center justify-center rounded-md"
+              >
+                <a
+                  href={`/c/${communityName}/post/${post.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xl text-red-500 border-red-500 font-extrabold border rounded-xl p-2 hover:text-red-800 hover:border-red-800"
+                >
+                  NSFW
                 </a>
               </div>
             ) : (

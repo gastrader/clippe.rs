@@ -28,30 +28,30 @@ const page = async ({ params }: PageProps) => {
       },
     },
   });
-  if (!community) return notFound();
+  // if (!community) return notFound();
 
   const subscription = !session?.user
     ? undefined
     : await db.subscription.findFirst({
         where: {
           community: {
-            id: community.id,
+            id: community?.id,
           },
           user: {
             id: session.user.id,
           },
         },
       });
-
+if(community){
   return (
     <CommunityLayout
       session={session}
       community={community}
       subscribed={!!subscription}
     >
-      <PostFeed view="new" initialPosts={[]} communityName={community.name} />
+      <PostFeed view="new" initialPosts={[]} communityName={community?.name} />
     </CommunityLayout>
-  );
+  );}
 };
 
 export default page;
