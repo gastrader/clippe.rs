@@ -196,7 +196,7 @@ export const Editor2: React.FC<Editor2Props> = ({ communityId }) => {
                 </FormControl>
               </div>
               <FormDescription className="flex-shrink">
-                Select a framework tag for the post.
+                Select a tag for the post.
               </FormDescription>
               <FormMessage />
             </FormItem>

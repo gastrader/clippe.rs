@@ -63,7 +63,7 @@ const ProfilePost: FC<ProfilePostProps> = ({
           <a href={`/c/${communityName}/post/${post.id}`}>
             <h1 className="text-lg font-semibold leading-6 text-gray-900 gap-2 flex ">
               <div
-                className={`shadow border border-gray-300 w-[40px] text-xs font-normal flex-shrink-0 justify-center items-center gap-2 rounded-xl px-2 text-white ${
+                className={`shadow border flex border-gray-300 w-[40px] text-xs font-normal flex-shrink-0 justify-center items-center rounded-xl px-2 text-white ${
                   post.sitename === "Twitch"
                     ? "bg-purple-500"
                     : post.sitename === "YouTube"
@@ -97,17 +97,18 @@ const ProfilePost: FC<ProfilePostProps> = ({
             </h1>
           </a>
 
-          <div className="max-h-40 mt-1 text-xs text-gray-500 flex justify-between items-center">
+          <div className="max-h-40 mt-1 text-xs text-gray-500 justify-between items-center">
             <div>
               {communityName ? (
-                <div className="flex items-center hover:">
+                <div className="flex items-center overflow-hidden whitespace-nowrap">
                   <a
                     className="underline text-zinc-900 text-sm underline-offset-2"
                     href={`/c/${communityName}`}
                   >
                     c/{communityName}
                   </a>
-                  <span className="px-1">•</span>
+
+                  {/* <span className="px-1">•</span> */}
                   <div>
                     <a
                       className="flex items-center gap-2 hover:bg-gray-200 p-2 rounded-lg"
