@@ -16,7 +16,7 @@
 A full stack typescript project developed using NextJS for the front end styled with Tailwind. Redis, PlanetscaleDB and React Query for the backend.
 ## Features
 
-* Creat custom feeds for users to filter their favourite streamers/communities.
+* Create custom feeds for users to filter their favourite streamers/communities.
 * Allows ONLY Twitch, Youtube and Kick clips to be posted.
 * Automatically generated tag for user context.
 * Users can sort by Top/New posts for their feeds and inside each community.
