@@ -6,7 +6,7 @@ import { buttonVariants } from "./ui/Button";
 import { UserAccountNav } from "./UserAccountNav";
 import SearchBar from "./SearchBar";
 import NotificationsPopoverServer from "./notifications/NotificationsPopoverServer";
-import { Suspense } from "react";
+
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
