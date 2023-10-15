@@ -71,7 +71,7 @@ const TopCommunities = () => {
                 <span className="font-medium hover:underline">
                   c/{community.name}
                 </span>
-                <span className="hidden lg:inline">:{" "}{community.subscribers} members</span>
+                <span className="md:hidden lg:inline">:{" "}{community.subscribers} members</span>
               </div>
             </Link>
           ))}
