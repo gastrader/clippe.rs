@@ -14,6 +14,8 @@
 <br>
 
 A full stack typescript project developed using NextJS for the front end styled with Tailwind. Redis, PlanetscaleDB and React Query for the backend.
+
+![](/public/home.png)
 ## Features
 
 * Create custom feeds for users to filter their favourite streamers/communities.
